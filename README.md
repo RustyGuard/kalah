@@ -14,26 +14,16 @@ uv run fastapi dev src/main.py
 
 ## Code tools
 
-### Black
-
-Code formatter
+### Code formatting and linting
 
 ```commandline
-uv run black
+uv run ruff check --fix src
+uv run ruff check --select I --fix src
+uv run ruff format src
 ```
 
-### Mypy
-
-Type checker
+### Type checking
 
 ```commandline
 uv run mypy src
-```
-
-### Ruff
-
-Linter
-
-```commandline
-uv run ruff check src
 ```
