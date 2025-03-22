@@ -1,8 +1,11 @@
-from fastapi import Request, Response
+from fastapi import APIRouter, Request, Response
 
 from templates import templates
 
+game_setup_router = APIRouter()
 
+
+@game_setup_router.get("/join_game")
 def join_game_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
@@ -11,6 +14,7 @@ def join_game_page(request: Request) -> Response:
     )
 
 
+@game_setup_router.get("/lobby_settings")
 def lobby_settings_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
@@ -19,6 +23,7 @@ def lobby_settings_page(request: Request) -> Response:
     )
 
 
+@game_setup_router.get("/waiting_room")
 def waiting_room_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,

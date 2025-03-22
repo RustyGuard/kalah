@@ -1,8 +1,11 @@
-from fastapi import Request, Response
+from fastapi import APIRouter, Request, Response
 
 from templates import templates
 
+greet_router = APIRouter()
 
+
+@greet_router.get("/")
 def main_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
@@ -11,6 +14,7 @@ def main_page(request: Request) -> Response:
     )
 
 
+@greet_router.get("/settings")
 def settings_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
