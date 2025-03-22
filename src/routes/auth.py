@@ -1,21 +1,29 @@
-from fastapi import Request, Response
-from pydantic import BaseModel
+from typing import Annotated
+
+from fastapi import Request, Response, APIRouter, Form
 
 from templates import templates
 
+AVATARS_COUNT = 10
 
+auth_router = APIRouter()
+
+@auth_router.get("/auth")
 def authorize_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="auth.html",
-        context={},
+        context={
+            "avatars": [
+                {
+                    "id": i
+                }
+                for i in range(AVATARS_COUNT)
+            ]
+        },
     )
 
 
-class AuthData(BaseModel):
-    user_name: str
-    avatar_id: int
-
-
-def authorize_user(request: Request, data: AuthData) -> Response:
+@auth_router.post("/auth")
+def authorize_user(request: Request, user_name: Annotated[str, Form()], avatar_id: Annotated[int, Form()]) -> Response:
     raise NotImplementedError
