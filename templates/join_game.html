@@ -5,6 +5,11 @@
     <title>Присоединиться к игре</title>
 </head>
 <body>
-
+<form>
+    <label for="join_code">Введите код приглашения</label>
+    <input name="join_code" id="join_code">
+    <button type="submit" disabled>Присоединиться</button>
+    <a href="{{url_for('main_page')}}">Вернуться на главную</a>
+</form>
 </body>
 </html>

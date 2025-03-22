@@ -5,6 +5,37 @@
     <title>Настройка лобби</title>
 </head>
 <body>
-
+<form>
+    <label for="game_mode">Режим игры</label>
+    <select id="game_mode" name="game_mode">
+        <option value="single_player">Однопользовательский</option>
+        <option value="multiplayer">Многопользовательский</option>
+    </select>
+    <label for="holes_count">Число лунок</label>
+    <select id="holes_count" name="holes_count">
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select>
+    <label for="stones_count">Число камней</label>
+    <select id="stones_count" name="stones_count">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+    </select>
+    <label for="difficulty_level">Уровень сложности</label>
+    <select id="difficulty_level" name="difficulty_level">
+        <option value="3">Лёгкая</option>
+        <option value="4">Средняя</option>
+        <option value="5">Сложная</option>
+    </select>
+    <button type="submit">Создать лобби</button>
+    <a href="{{url_for('main_page')}}">Вернуться на главную</a>
+</form>
 </body>
 </html>

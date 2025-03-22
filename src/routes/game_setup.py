@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi import APIRouter, Request, Response
 
 from templates import templates
@@ -28,5 +30,9 @@ def waiting_room_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="waiting_room.html",
-        context={},
+        context={
+            "holes_count": 6,
+            "stones_count": 1,
+            "join_code": uuid.uuid4(),
+        },
     )

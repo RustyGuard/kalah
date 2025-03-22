@@ -10,7 +10,7 @@ def main_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="main_page.html",
-        context={"item_id": 5},
+        context={"avatar_url": "https://avatar.iran.liara.run/public", "user_name": "User name"},
     )
 
 

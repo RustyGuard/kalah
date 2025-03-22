@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Form, Request, Response
+from fastapi.responses import RedirectResponse
 
 from templates import templates
 
@@ -25,3 +26,10 @@ def authorize_user(
     avatar_id: Annotated[int, Form()],
 ) -> Response:
     raise NotImplementedError
+
+
+@auth_router.get("/exit")
+def exit_user(
+    request: Request,
+) -> Response:
+    return RedirectResponse("/auth")
