@@ -1,8 +1,13 @@
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Depends, Request, Response
 
+from routes.auth import auth_required
 from templates import templates
 
-help_router = APIRouter()
+help_router = APIRouter(
+    dependencies=[
+        Depends(auth_required),
+    ]
+)
 
 
 @help_router.get("/help")

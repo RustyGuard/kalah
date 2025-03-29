@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Request, Response, WebSocket
+from fastapi import APIRouter, Depends, Request, Response, WebSocket
 
+from routes.auth import auth_required
 from templates import templates
 
 game_board_router = APIRouter()
 
 
 @game_board_router.get("/game_board")
-def game_board_page(request: Request) -> Response:
+def game_board_page(request: Request, _=Depends(auth_required)) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="game_board.html",

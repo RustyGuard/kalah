@@ -1,10 +1,15 @@
 import uuid
 
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Depends, Request, Response
 
+from routes.auth import auth_required
 from templates import templates
 
-game_setup_router = APIRouter()
+game_setup_router = APIRouter(
+    dependencies=[
+        Depends(auth_required),
+    ]
+)
 
 
 @game_setup_router.get("/join_game")
