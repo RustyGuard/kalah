@@ -17,13 +17,11 @@ uv run fastapi dev src/main.py
 ### Code formatting and linting
 
 ```commandline
-uv run ruff check --fix src tests
-uv run ruff check --select I --fix src tests
-uv run ruff format src tests
+uv run format.py
 ```
 
 ### Type checking
 
 ```commandline
-uv run mypy src
+uv run mypy src tests
 ```
