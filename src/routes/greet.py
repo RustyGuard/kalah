@@ -16,7 +16,9 @@ def main_page(request: Request, user: dict = Depends(auth_required)) -> Response
         request=request,
         name="main_page.html",
         context={
-            "avatar_url": "https://avatar.iran.liara.run/public",
+            "avatar_url": request.url_for(
+                "static", path=f"images/avatars/avatar{user['avatar_id']}.svg"
+            ),
             "user_name": user["user_name"],
         },
     )
