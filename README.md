@@ -25,3 +25,10 @@ uv run format.py
 ```commandline
 uv run mypy src tests
 ```
+
+
+### Testing
+
+```commandline
+uv run pytest
+```
