@@ -41,7 +41,7 @@ def authorize_user(
     user_name: Annotated[str, Form()],
     avatar_id: Annotated[int, Form()],
 ) -> Response:
-    response = RedirectResponse("/", status_code=status.HTTP_302_FOUND)
+    response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
     auth_token = create_auth_token(user_name, avatar_id)
     response.set_cookie(
         AUTH_COOKIE_NAME,

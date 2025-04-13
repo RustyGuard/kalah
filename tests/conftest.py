@@ -20,7 +20,7 @@ def player_token(player_client):
         },
         follow_redirects=False,
     )
-    assert response.status_code == status.HTTP_302_FOUND
+    assert response.status_code == status.HTTP_303_SEE_OTHER
     return response.cookies["access_token"]
 
 
@@ -39,5 +39,5 @@ def opponent_token(opponent_client):
         },
         follow_redirects=False,
     )
-    assert response.status_code == status.HTTP_302_FOUND
+    assert response.status_code == status.HTTP_303_SEE_OTHER
     return response.cookies["access_token"]

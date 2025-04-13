@@ -9,5 +9,18 @@
 <div>Количество камней на лунку: {{stones_count}}</div>
 <div>Код приглашения: {{join_code}}</div>
 <a href="{{url_for('main_page')}}">Вернуться на главную</a>
+<script>
+    var ws = new WebSocket("ws://localhost:8000/waiting_room/ws");
+    ws.onmessage = function(event) {
+        window.location.replace("/game_board")
+    }
+<!--    function sendMessage(event) {-->
+<!--        var input = document.getElementById("messageText")-->
+<!--        ws.send(input.value)-->
+<!--        input.value = ''-->
+<!--        event.preventDefault()-->
+<!--    }-->
+</script>
+
 </body>
 </html>
