@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Игровое поле</title>
-</head>
-<body>
-<h1>WebSocket Chat</h1>
+{% extends "base.html" %}
+
+{% block title %}Игровое поле{% endblock %}
+
+{% block content %}
+<h1>Игровое поле</h1>
 <form action="" onsubmit="sendMessage(event)">
     <input type="text" id="messageText" autocomplete="off"/>
     <button>Send</button>
@@ -28,5 +26,4 @@
         event.preventDefault()
     }
 </script>
-</body>
-</html>
+{% endblock %}

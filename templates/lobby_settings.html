@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Настройка лобби</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Настройка лобби{% endblock %}
+
+{% block content %}
 <form method="post">
     <label for="game_mode">Режим игры</label>
     <select id="game_mode" name="game_mode">
@@ -37,5 +35,4 @@
     <button type="submit">Создать лобби</button>
     <a href="{{url_for('main_page')}}">Вернуться на главную</a>
 </form>
-</body>
-</html>
+{% endblock %}

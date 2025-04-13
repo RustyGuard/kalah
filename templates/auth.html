@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Авторизация</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
 <form action="{{url_for('authorize_user')}}" method="post">
     <label for="user_name">
         Логин
@@ -12,10 +10,9 @@
     <input id="user_name" name="user_name" value="" required/>
     <select name="avatar_id" id="avatar_id">
         {% for avatar in avatars %}
-            <option value="{{avatar.id}}">Аватар {{avatar.id}}</option>
+        <option value="{{avatar.id}}">Аватар {{avatar.id}}</option>
         {% endfor %}
     </select>
     <button type="submit">Войти</button>
 </form>
-</body>
-</html>
+{% endblock %}

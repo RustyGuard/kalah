@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Комната ожидания</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Комната ожидания{% endblock %}
+
+{% block content %}
 <div>Количество лунок на игрока: {{holes_count}}</div>
 <div>Количество камней на лунку: {{stones_count}}</div>
 <div>Код приглашения: {{join_code}}</div>
@@ -14,13 +12,5 @@
     ws.onmessage = function(event) {
         window.location.replace("/game_board")
     }
-<!--    function sendMessage(event) {-->
-<!--        var input = document.getElementById("messageText")-->
-<!--        ws.send(input.value)-->
-<!--        input.value = ''-->
-<!--        event.preventDefault()-->
-<!--    }-->
 </script>
-
-</body>
-</html>
+{% endblock %}
