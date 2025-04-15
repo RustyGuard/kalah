@@ -5,8 +5,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Form, Request, Response, WebSocket, status
 from fastapi.responses import RedirectResponse
 
-from routes.auth import auth_required
-from templates import templates
+from src.routes.auth import auth_required
+from src.templates import templates
 
 game_setup_router = APIRouter()
 

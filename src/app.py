@@ -7,8 +7,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette_context import plugins
 from starlette_context.middleware import RawContextMiddleware
 
-from core.config import settings
-from routes.auth import AuthError
+from src.core.config import settings
+from src.routes.auth import AuthError
 
 
 def get_application() -> FastAPI:
@@ -49,11 +49,11 @@ def init_middlewares(app: FastAPI) -> None:
 
 
 def init_routers(app: FastAPI) -> None:
-    from routes.auth import auth_router
-    from routes.game_board import game_board_router
-    from routes.game_setup import game_setup_router
-    from routes.greet import greet_router
-    from routes.help import help_router
+    from src.routes.auth import auth_router
+    from src.routes.game_board import game_board_router
+    from src.routes.game_setup import game_setup_router
+    from src.routes.greet import greet_router
+    from src.routes.help import help_router
 
     @app.get("/ping")
     async def ping() -> dict[str, bool | str]:
@@ -69,7 +69,7 @@ def init_routers(app: FastAPI) -> None:
 
 
 def init_errors_handlers(app: FastAPI) -> None:
-    from exceptions_handlers import unauthorized_handler
+    from src.exceptions_handlers import unauthorized_handler
 
     # ToDo глянуть валидно ли
     app.add_exception_handler(AuthError, unauthorized_handler)  # type: ignore[arg-type]

@@ -35,7 +35,9 @@ class Settings(BaseSettings):
 
     @field_validator("DATABASE_URI", mode="before")
     @classmethod
-    def assemble_db_connection(cls, v: Optional[str], info: ValidationInfo) -> PostgresDsn:
+    def assemble_db_connection(
+        cls, v: Optional[str], info: ValidationInfo
+    ) -> PostgresDsn:
         if isinstance(v, str):
             return PostgresDsn(v)
 
@@ -44,7 +46,7 @@ class Settings(BaseSettings):
             username=info.data.get("POSTGRES_USER"),
             password=info.data.get("POSTGRES_PASSWORD"),
             host=info.data.get("POSTGRES_SERVER"),
-            path=f"/{info.data.get('POSTGRES_DB')}",
+            path=info.data.get("POSTGRES_DB"),
         )
 
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")

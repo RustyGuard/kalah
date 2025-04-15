@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Form, Request, Response, status
 from fastapi.responses import RedirectResponse
 
-from logic.auth import create_auth_token, decode_access_token
-from templates import templates
+from src.logic.auth import create_auth_token, decode_access_token
+from src.templates import templates
 
 AVATARS_COUNT = 10
 

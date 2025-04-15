@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Response, WebSocket
 
-from routes.auth import auth_required
-from templates import templates
+from src.routes.auth import auth_required
+from src.templates import templates
 
 game_board_router = APIRouter()
 

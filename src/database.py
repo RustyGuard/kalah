@@ -1,10 +1,8 @@
-import re
-
 from sqlalchemy import MetaData, create_engine
 from sqlalchemy.inspection import inspect
-from sqlalchemy.orm import Session, as_declarative, declared_attr, sessionmaker
+from sqlalchemy.orm import Session, as_declarative, sessionmaker
 
-from core.config import settings
+from src.core.config import settings
 
 engine = create_engine(str(settings.DATABASE_URI), echo=False, pool_pre_ping=True)
 async_session = sessionmaker(
@@ -29,10 +27,6 @@ metadata = MetaData(naming_convention=POSTGRES_INDEXES_NAMING_CONVENTION)
 
 @as_declarative(metadata=metadata)
 class BaseModel:
-    @declared_attr  # type: ignore[attr-defined, arg-type]
-    def __tablename__(cls) -> str:
-        return re.sub(r"(?<!^)(?=[A-Z])", "_", cls.__name__).lower()  # type: ignore[attr-defined]
-
     def __repr__(self) -> str:
         pk = inspect(self.__class__).primary_key[0].name  # type: ignore[union-attr]
         return f"<{self.__class__.__name__} {getattr(self, pk, id(self))}>"
