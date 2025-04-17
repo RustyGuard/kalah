@@ -4,7 +4,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form, Request, Response, WebSocket, status
 from fastapi.responses import RedirectResponse
+from sqlalchemy.orm import Session
 
+from src.database import get_session
+from src.logic.game_setup import create_single_player_game
 from src.routes.auth import auth_required
 from src.templates import templates
 
@@ -36,14 +39,23 @@ def lobby_settings_page(request: Request, _=Depends(auth_required)) -> Response:
 
 @game_setup_router.post("/lobby_settings")
 def lobby_settings(
+    session: Annotated[Session, Depends(get_session)],
     game_mode: Annotated[str, Form()],
     holes_count: Annotated[str, Form()],
     stones_count: Annotated[str, Form()],
-    difficulty_level: Annotated[str, Form()],
-    _=Depends(auth_required),
+    difficulty_level: Annotated[str, Form()],  # todo
+    player=Depends(auth_required),
 ):
     if game_mode == "single_player":
-        return RedirectResponse("/game_board", status_code=status.HTTP_303_SEE_OTHER)
+        lobby = create_single_player_game(
+            session,
+            player_nick=player["user_name"],
+            holes_count=int(holes_count),
+            stones_per_hole_count=int(stones_count),
+        )
+        return RedirectResponse(
+            f"/game_board/{lobby.id}", status_code=status.HTTP_303_SEE_OTHER
+        )
     else:
         return RedirectResponse("/waiting_room", status_code=status.HTTP_303_SEE_OTHER)
 

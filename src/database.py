@@ -1,18 +1,17 @@
+from typing import Generator
+
 from sqlalchemy import MetaData, create_engine
 from sqlalchemy.inspection import inspect
-from sqlalchemy.orm import Session, as_declarative, sessionmaker
+from sqlalchemy.orm import Session, as_declarative
 
 from src.core.config import settings
 
 engine = create_engine(str(settings.DATABASE_URI), echo=False, pool_pre_ping=True)
-async_session = sessionmaker(
-    engine, expire_on_commit=False, autocommit=False, autoflush=False
-)
 
 
-def get_session() -> Session:
-    with async_session() as session:
-        return session
+def get_session() -> Generator[Session, None, None]:
+    with Session(engine) as session:
+        yield session
 
 
 POSTGRES_INDEXES_NAMING_CONVENTION = {

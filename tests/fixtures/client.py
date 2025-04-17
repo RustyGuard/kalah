@@ -2,12 +2,17 @@ import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from asgi import app
+from src.app import get_application
 
 
 @pytest.fixture
-def player_client():
-    yield TestClient(app)
+def test_app():
+    return get_application()
+
+
+@pytest.fixture
+def player_client(test_app):
+    yield TestClient(test_app)
 
 
 @pytest.fixture
@@ -25,8 +30,8 @@ def player_token(player_client):
 
 
 @pytest.fixture
-def opponent_client():
-    yield TestClient(app)
+def opponent_client(test_app):
+    yield TestClient(test_app)
 
 
 @pytest.fixture
