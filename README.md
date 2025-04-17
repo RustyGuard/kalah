@@ -30,7 +30,9 @@ uv run mypy src tests --explicit-package-bases
 ### Testing
 
 ```commandline
+docker compose up -d
 uv run pytest
+docker compose down
 ```
 
 
