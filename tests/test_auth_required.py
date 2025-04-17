@@ -11,7 +11,7 @@ from fastapi.testclient import TestClient
         "/help",
         "/join_game",
         "/lobby_settings",
-        "/waiting_room",
+        "/waiting_room/1",
         "/game_board/1",
     ],
 )
@@ -29,7 +29,6 @@ def test_auth_redirect(player_client: TestClient, page_path: str):
         "/help",
         "/join_game",
         "/lobby_settings",
-        "/waiting_room",
     ],
 )
 def test_get_with_cookie(player_client: TestClient, player_token: str, page_path: str):

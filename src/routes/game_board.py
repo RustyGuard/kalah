@@ -5,23 +5,25 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import select
 
 from src.database import get_session
-from src.models import Lobby
+from src.models import GameState
 from src.routes.auth import auth_required
 from src.templates import templates
 
 game_board_router = APIRouter()
 
 
-@game_board_router.get("/game_board/{lobby_id}")
+@game_board_router.get("/game_board/{settings_id}")
 def game_board_page(
     session: Annotated[Session, Depends(get_session)],
     request: Request,
-    lobby_id: int,
+    settings_id: int,
     _=Depends(auth_required),
 ) -> Response:
-    lobby = session.scalar(select(Lobby).where(Lobby.id == lobby_id))
-    print(lobby)
-
+    state: GameState | None = session.scalar(
+        select(GameState).where(GameState.settings_id == settings_id)
+    )
+    assert state is not None
+    print(f"{state.settings.lobby.player2_nick=}")
     return templates.TemplateResponse(
         request=request,
         name="game_board.html",
