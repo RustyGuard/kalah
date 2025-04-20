@@ -4,26 +4,35 @@
 
 {% block content %}
 <h1>Игровое поле</h1>
-<form action="" onsubmit="sendMessage(event)">
-    <input type="text" id="messageText" autocomplete="off"/>
-    <button>Send</button>
-</form>
-<ul id='messages'>
-</ul>
+
+{% for hole in state.holes_player2 | reverse  %}
+<button id="player2_hole{{loop.revindex0}}">{{hole}}</button>
+{% endfor %}
+<br>
+{% for hole in state.holes_player1  %}
+<button id="player1_hole{{loop.index0}}">{{hole}}</button>
+{% endfor %}
+
 <script>
-    var ws = new WebSocket("ws://localhost:8000/ws");
+    var ws = new WebSocket("ws://localhost:8000/ws/{{settings_id}}");
     ws.onmessage = function(event) {
-        var messages = document.getElementById('messages')
-        var message = document.createElement('li')
-        var content = document.createTextNode(event.data)
-        message.appendChild(content)
-        messages.appendChild(message)
-    };
-    function sendMessage(event) {
-        var input = document.getElementById("messageText")
-        ws.send(input.value)
-        input.value = ''
-        event.preventDefault()
+        console.log(event.data)
+        const message = JSON.parse(event.data)
+        if (message["type"] == "new_state") {
+            {% for hole in state.holes_player1  %}
+            player1_hole{{loop.index0}}.innerText = message["holes_player1"][{{loop.index0}}]
+            {% endfor %}
+            {% for hole in state.holes_player2  %}
+            player2_hole{{loop.index0}}.innerText = message["holes_player2"][{{loop.index0}}]
+            {% endfor %}
+        }
     }
+    {% for hole in state.holes_player1  %}
+    player1_hole{{loop.index0}}.onclick = function() {
+        ws.send(JSON.stringify({
+            "hole": {{loop.index0}}
+        }))
+    }
+    {% endfor %}
 </script>
 {% endblock %}
