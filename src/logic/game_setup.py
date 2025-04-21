@@ -21,11 +21,13 @@ def create_single_player_game(
     player_nick: str,
     holes_count: int,
     stones_per_hole_count: int,
+    difficulty_level: int,
 ) -> GameSettings:
     settings = GameSettings()
     settings.holes_count = holes_count
     settings.stones_per_hole_count = stones_per_hole_count
     settings.game_mode = GameMode.SINGLE_PLAYER
+    settings.difficulty_level = difficulty_level
     lobby = Lobby()
     lobby.player1_nick = player_nick
     lobby.player2_nick = None

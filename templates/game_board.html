@@ -6,21 +6,28 @@
 <h1>Игровое поле</h1>
 
 {% for hole in state.holes_player2 | reverse  %}
-<button id="player2_hole{{loop.revindex0}}">{{hole}}</button>
+<button id="player2_hole{{loop.revindex0}}" disabled="disabled">{{hole}}</button>
 {% endfor %}
 <br>
 {% for hole in state.holes_player1  %}
 <button id="player1_hole{{loop.index0}}">{{hole}}</button>
 {% endfor %}
+<div>
+    <img src="{{current_player_avatar}}" width="50"/>
+    <span>{{current_player['user_name']}}</span>
+</div>
 
 <script>
-    var ws = new WebSocket("ws://localhost:8000/ws/{{settings_id}}");
+    var ws = new WebSocket("ws://localhost:8000/ws/{{settings_id}}/{{current_player["user_name"]}}")
+    const current_player = "{{current_player["user_name"]}}"
     ws.onmessage = function(event) {
         console.log(event.data)
         const message = JSON.parse(event.data)
         if (message["type"] == "new_state") {
+            const disabled = message["current_player"] !== current_player
             {% for hole in state.holes_player1  %}
             player1_hole{{loop.index0}}.innerText = message["holes_player1"][{{loop.index0}}]
+            player1_hole{{loop.index0}}.disabled = disabled
             {% endfor %}
             {% for hole in state.holes_player2  %}
             player2_hole{{loop.index0}}.innerText = message["holes_player2"][{{loop.index0}}]

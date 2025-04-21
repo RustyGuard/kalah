@@ -16,6 +16,10 @@ class GameMode(enum.Enum):
     MULTIPLAYER = "multiplayer"
 
 
+class Difficulty(enum.Enum):
+    EASY = "easy"
+
+
 class Lobby(BaseModel):
     __tablename__ = "lobby"
 
@@ -43,6 +47,7 @@ class GameSettings(BaseModel):
     holes_count: Mapped[int] = mapped_column(Integer, nullable=False)
     stones_per_hole_count: Mapped[int] = mapped_column(Integer, nullable=False)
     game_mode: Mapped[GameMode] = mapped_column(Enum(GameMode), nullable=False)
+    difficulty_level: Mapped[int]
     lobby_id: Mapped[int] = mapped_column(ForeignKey("lobby.id"))
 
     # Отношение
@@ -57,7 +62,7 @@ class GameState(BaseModel):
     )
     holes_player1: Mapped[list[int]] = mapped_column(ARRAY(Integer))
     holes_player2: Mapped[list[int]] = mapped_column(ARRAY(Integer))
-    current_player: Mapped[str] = mapped_column(ForeignKey("player.nickname"))
+    current_player: Mapped[str | None] = mapped_column(ForeignKey("player.nickname"))
 
     # Отношения
     settings: Mapped["GameSettings"] = relationship()

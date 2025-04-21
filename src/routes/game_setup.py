@@ -68,6 +68,7 @@ def lobby_settings(
             player_nick=player["user_name"],
             holes_count=int(holes_count),
             stones_per_hole_count=int(stones_count),
+            difficulty_level=int(difficulty_level),
         )
         return RedirectResponse(
             f"/game_board/{settings.id}", status_code=status.HTTP_303_SEE_OTHER

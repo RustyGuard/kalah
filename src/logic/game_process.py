@@ -1,3 +1,6 @@
+import random
+
+
 def make_a_turn(
     current_player_holes: list[int], opponent_holes: list[int], selected_cell_index: int
 ) -> None:
@@ -13,3 +16,7 @@ def make_a_turn(
             current_side_index = 1 - current_side_index
         sides[current_side_index][current_cell_index] += 1
         stones_to_distribute -= 1
+
+
+def get_best_turn(ai_holes: list[int], opponent_holes: list[int]) -> int:
+    return random.choice([(i, hole) for i, hole in enumerate(ai_holes[:-1]) if hole])[0]
