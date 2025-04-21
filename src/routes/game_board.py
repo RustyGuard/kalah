@@ -3,6 +3,7 @@ from collections import defaultdict
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request, Response, WebSocket
+from fastapi.websockets import WebSocketDisconnect
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.sql import select
@@ -143,7 +144,10 @@ async def websocket_endpoint(
     )
     assert state is not None
     await websocket.accept()
-    if state.settings.game_mode == GameMode.SINGLE_PLAYER:
-        await handle_single_player(session, websocket, state, player_nick)
-    else:
-        await handle_multiplayer(session, websocket, state, player_nick)
+    try:
+        if state.settings.game_mode == GameMode.SINGLE_PLAYER:
+            await handle_single_player(session, websocket, state, player_nick)
+        else:
+            await handle_multiplayer(session, websocket, state, player_nick)
+    except WebSocketDisconnect:
+        pass
