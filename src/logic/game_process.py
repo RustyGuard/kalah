@@ -25,3 +25,7 @@ def get_best_turn(ai_holes: list[int], opponent_holes: list[int]) -> int | None:
         )[0]
     except IndexError:
         return None
+
+
+def can_turn_be_made(current_player_holes: list[int]) -> bool:
+    return any(current_player_holes[:-1])

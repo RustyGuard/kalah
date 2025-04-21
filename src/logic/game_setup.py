@@ -50,6 +50,7 @@ def create_multiplayer_game(
     settings.holes_count = holes_count
     settings.stones_per_hole_count = stones_per_hole_count
     settings.game_mode = GameMode.MULTIPLAYER
+    settings.difficulty_level = 3
     lobby = Lobby()
     lobby.player1_nick = player_nick
     lobby.player2_nick = None
