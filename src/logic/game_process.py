@@ -18,5 +18,10 @@ def make_a_turn(
         stones_to_distribute -= 1
 
 
-def get_best_turn(ai_holes: list[int], opponent_holes: list[int]) -> int:
-    return random.choice([(i, hole) for i, hole in enumerate(ai_holes[:-1]) if hole])[0]
+def get_best_turn(ai_holes: list[int], opponent_holes: list[int]) -> int | None:
+    try:
+        return random.choice(
+            [(i, hole) for i, hole in enumerate(ai_holes[:-1]) if hole]
+        )[0]
+    except IndexError:
+        return None

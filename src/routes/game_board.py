@@ -71,9 +71,10 @@ async def websocket_endpoint(
         )
         await asyncio.sleep(1.0)
         ai_turn = get_best_turn(state.holes_player2, state.holes_player1)
-        make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
-        flag_modified(state, "holes_player1")
-        flag_modified(state, "holes_player2")
+        if ai_turn is not None:
+            make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
+            flag_modified(state, "holes_player1")
+            flag_modified(state, "holes_player2")
         state.current_player = player_nick
         session.commit()
         print(data)
