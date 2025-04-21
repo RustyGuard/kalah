@@ -10,7 +10,7 @@
 {% endfor %}
 <br>
 {% for hole in state.holes_player1  %}
-<button id="player1_hole{{loop.index0}}">{{hole}}</button>
+<button id="player1_hole{{loop.index0}}" {% if loop.last %} disabled="disabled"{% endif %}>{{hole}}</button>
 {% endfor %}
 <div>
     <img src="{{current_player_avatar}}" width="50"/>
@@ -27,7 +27,9 @@
             const disabled = message["current_player"] !== current_player
             {% for hole in state.holes_player1  %}
             player1_hole{{loop.index0}}.innerText = message["holes_player1"][{{loop.index0}}]
+            {% if not loop.last %}
             player1_hole{{loop.index0}}.disabled = disabled
+            {% endif %}
             {% endfor %}
             {% for hole in state.holes_player2  %}
             player2_hole{{loop.index0}}.innerText = message["holes_player2"][{{loop.index0}}]
