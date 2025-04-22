@@ -11,28 +11,26 @@
             <option value="multiplayer">Многопользовательский</option>
         </select>
     </div>
-    <div style="display:flex;">
-        <div>
-            <label for="holes_count">Число лунок</label>
-            <select id="holes_count" name="holes_count">
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-        <div>
-            <label for="stones_count">Число камней</label>
-            <select id="stones_count" name="stones_count">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
-        </div>
+    <div>
+        <label for="holes_count">Число лунок</label>
+        <select id="holes_count" name="holes_count">
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+    <div>
+        <label for="stones_count">Число камней</label>
+        <select id="stones_count" name="stones_count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
     </div>
     <div>
         <label for="difficulty_level">Уровень сложности</label>
@@ -43,6 +41,12 @@
         </select>
     </div>
     <button class="big_button" type="submit">Создать лобби</button>
-    <a href="{{url_for('main_page')}}"><button class="big_button" type="button">Вернуться на главную</button></a>
+    <a href="{{url_for('main_page')}}">
+        <button class="big_button" type="button">Вернуться на главную</button>
+    </a>
 </form>
+<a href="{{url_for('help_page')}}" class="reference">
+    <button class="middle_button">Справка</button>
+</a>
+<button class="developers middle_button">О разработчиках</button>
 {% endblock %}
