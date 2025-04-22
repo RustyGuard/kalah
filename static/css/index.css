@@ -1,5 +1,4 @@
 h1 {
-    color: red;
     text-align: center;
     font-size: 64px;
 }
@@ -39,4 +38,39 @@ label, input {
     bottom: 0;
     right: 0;
     margin: 10px;
+}
+
+.avatar_item {
+   display: flex;
+   align-items: center;
+   gap: 5px;
+}
+
+.avatar_item img {
+    width: 150px;
+}
+
+
+.avatar_item span {
+    font-size: 50px;
+}
+
+.game_board button {
+    min-width: 55px;
+    width: 8vw;
+    aspect-ratio: 1;
+    font-size: 50px;
+    border-radius: 25%;
+}
+
+.game_board button:hover {
+    background-color: #b7b7b7;
+}
+
+.game_board button:disabled {
+    background-color: #edeceb;
+}
+
+.game_board button.kalah {
+    aspect-ratio: 0.5;
 }

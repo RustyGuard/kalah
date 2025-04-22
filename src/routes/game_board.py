@@ -28,6 +28,36 @@ def game_board_page(
         select(GameState).where(GameState.settings_id == settings_id)
     )
     assert state is not None
+    current_player_name = player["user_name"]
+    current_player_avatar = request.url_for(
+        "static", path=f"images/avatars/avatar{player['avatar_id']}.svg"
+    )
+    if state.settings.lobby.player1_nick == current_player_name:
+        current_player_holes = state.holes_player1
+        current_player_key = "holes_player1"
+        opponent_player_holes = state.holes_player2
+        opponent_player_key = "holes_player2"
+        if state.settings.lobby.player2_nick is not None:
+            opponent_player_avatar = request.url_for(
+                "static",
+                path=f"images/avatars/avatar{state.settings.lobby.player2.avatar_id}.svg",
+            )
+        else:
+            opponent_player_avatar = request.url_for(
+                "static", path="images/avatars/bot.svg"
+            )
+        opponent_player_name = state.settings.lobby.player2_nick
+    else:
+        current_player_holes = state.holes_player2
+        current_player_key = "holes_player2"
+        opponent_player_holes = state.holes_player1
+        opponent_player_key = "holes_player1"
+        opponent_player_avatar = request.url_for(
+            "static",
+            path=f"images/avatars/avatar{state.settings.lobby.player1.avatar_id}.svg",
+        )
+        opponent_player_name = state.settings.lobby.player1_nick
+
     print(f"{state.settings.lobby.player2_nick=}")
     return templates.TemplateResponse(
         request=request,
@@ -35,10 +65,14 @@ def game_board_page(
         context={
             "state": state,
             "settings_id": settings_id,
-            "current_player": player,
-            "current_player_avatar": request.url_for(
-                "static", path=f"images/avatars/avatar{player['avatar_id']}.svg"
-            ),
+            "current_player_name": current_player_name,
+            "opponent_player_name": opponent_player_name,
+            "current_player_avatar": current_player_avatar,
+            "opponent_player_avatar": opponent_player_avatar,
+            "current_player_holes": current_player_holes,
+            "current_player_key": current_player_key,
+            "opponent_player_holes": opponent_player_holes,
+            "opponent_player_key": opponent_player_key,
         },
     )
 
