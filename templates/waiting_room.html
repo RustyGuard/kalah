@@ -10,9 +10,9 @@
     <a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
 </div>
 <script>
-    var ws = new WebSocket("ws://localhost:8000/waiting_room/ws");
+    var ws = new WebSocket("ws://localhost:8000/waiting_room/{{settings_id}}/ws");
     ws.onmessage = function(event) {
-        window.location.replace("/game_board")
+        window.location.replace("/game_board/{{settings_id}}")
     }
 </script>
 {% endblock %}

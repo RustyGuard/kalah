@@ -5,8 +5,14 @@ description = "Greatest game of all time"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "alembic>=1.15.2",
+    "alembic-postgresql-enum>=1.7.0",
     "fastapi[standard]>=0.115.11",
+    "psycopg2-binary>=2.9.10",
+    "pydantic-settings>=2.8.1",
     "pyjwt>=2.10.1",
+    "sqlalchemy>=2.0.40",
+    "starlette-context>=0.4.0",
 ]
 
 [dependency-groups]
@@ -18,7 +24,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = "src"
+pythonpath = "."
 testpaths = [
     "tests",
 ]

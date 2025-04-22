@@ -1,10 +1,12 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Form, Request, Response, status
+from fastapi import APIRouter, Depends, Form, Request, Response, status
 from fastapi.responses import RedirectResponse
+from sqlalchemy.orm import Session
 
-from logic.auth import create_auth_token, decode_access_token
-from templates import templates
+from src.database import get_session
+from src.logic.auth import create_player, decode_access_token
+from src.templates import templates
 
 AVATARS_COUNT = 10
 
@@ -38,11 +40,12 @@ def auth_required(request: Request):
 
 @auth_router.post("/auth")
 def authorize_user(
+    session: Annotated[Session, Depends(get_session)],
     user_name: Annotated[str, Form()],
     avatar_id: Annotated[int, Form()],
 ) -> Response:
     response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
-    auth_token = create_auth_token(user_name, avatar_id)
+    auth_token = create_player(session, user_name, avatar_id)
     response.set_cookie(
         AUTH_COOKIE_NAME,
         value=auth_token,

@@ -1,23 +1,153 @@
-from fastapi import APIRouter, Depends, Request, Response, WebSocket
+import asyncio
+from collections import defaultdict
+from typing import Annotated
 
-from routes.auth import auth_required
-from templates import templates
+from fastapi import APIRouter, Depends, Request, Response, WebSocket
+from fastapi.websockets import WebSocketDisconnect
+from sqlalchemy.orm import Session
+from sqlalchemy.orm.attributes import flag_modified
+from sqlalchemy.sql import select
+
+from src.database import get_session
+from src.logic.game_process import can_turn_be_made, get_best_turn, make_a_turn
+from src.models import GameMode, GameState
+from src.routes.auth import auth_required
+from src.templates import templates
 
 game_board_router = APIRouter()
 
 
-@game_board_router.get("/game_board")
-def game_board_page(request: Request, _=Depends(auth_required)) -> Response:
+@game_board_router.get("/game_board/{settings_id}")
+def game_board_page(
+    session: Annotated[Session, Depends(get_session)],
+    request: Request,
+    settings_id: int,
+    player=Depends(auth_required),
+) -> Response:
+    state: GameState | None = session.scalar(
+        select(GameState).where(GameState.settings_id == settings_id)
+    )
+    assert state is not None
+    print(f"{state.settings.lobby.player2_nick=}")
     return templates.TemplateResponse(
         request=request,
         name="game_board.html",
-        context={},
+        context={
+            "state": state,
+            "settings_id": settings_id,
+            "current_player": player,
+            "current_player_avatar": request.url_for(
+                "static", path=f"images/avatars/avatar{player['avatar_id']}.svg"
+            ),
+        },
     )
 
 
-@game_board_router.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
+async def handle_single_player(
+    session: Session,
+    websocket: WebSocket,
+    state: GameState,
+    player_nick: str,
+):
     while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(f"Message text was: {data}")
+        data = await websocket.receive_json()
+        make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
+        flag_modified(state, "holes_player1")
+        flag_modified(state, "holes_player2")
+        state.current_player = None
+        session.commit()
+        await websocket.send_json(
+            {
+                "type": "new_state",
+                "holes_player1": state.holes_player1,
+                "holes_player2": state.holes_player2,
+                "current_player": state.current_player,
+            }
+        )
+        while True:
+            await asyncio.sleep(1.0)
+            ai_turn = get_best_turn(state.holes_player2, state.holes_player1)
+            print(ai_turn)
+            if ai_turn is not None:
+                make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
+                flag_modified(state, "holes_player1")
+                flag_modified(state, "holes_player2")
+            if can_turn_be_made(state.holes_player1):
+                state.current_player = player_nick
+            session.commit()
+            await websocket.send_json(
+                {
+                    "type": "new_state",
+                    "holes_player1": state.holes_player1,
+                    "holes_player2": state.holes_player2,
+                    "current_player": state.current_player,
+                }
+            )
+            if can_turn_be_made(state.holes_player1):
+                break
+            if not can_turn_be_made(state.holes_player1) and not can_turn_be_made(
+                state.holes_player2
+            ):
+                return
+
+
+settings_id_to_sockets: defaultdict[int, list[WebSocket]] = defaultdict(list)
+
+
+async def handle_multiplayer(
+    session: Session,
+    websocket: WebSocket,
+    state: GameState,
+    player_nick: str,
+):
+    settings_id_to_sockets[state.settings_id].append(websocket)
+    while True:
+        data = await websocket.receive_json()
+        session.refresh(state)
+        if state.settings.lobby.player1_nick == player_nick:
+            make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
+            if can_turn_be_made(state.holes_player2):
+                state.current_player = state.settings.lobby.player2_nick
+        else:
+            make_a_turn(state.holes_player2, state.holes_player1, int(data["hole"]))
+            if can_turn_be_made(state.holes_player1):
+                state.current_player = state.settings.lobby.player1_nick
+        print(
+            f"{state.current_player=} {state.settings.lobby.player1_nick=} {state.settings.lobby.player2_nick=}"
+        )
+        flag_modified(state, "holes_player1")
+        flag_modified(state, "holes_player2")
+        session.commit()
+        for player_socket in settings_id_to_sockets[state.settings_id].copy():
+            try:
+                await player_socket.send_json(
+                    {
+                        "type": "new_state",
+                        "holes_player1": state.holes_player1,
+                        "holes_player2": state.holes_player2,
+                        "current_player": state.current_player,
+                    }
+                )
+            except RuntimeError:
+                settings_id_to_sockets[state.settings_id].remove(player_socket)
+
+
+@game_board_router.websocket("/ws/{settings_id}/{player_nick}")
+async def websocket_endpoint(
+    session: Annotated[Session, Depends(get_session)],
+    websocket: WebSocket,
+    settings_id: int,
+    player_nick: str,
+):
+    state: GameState | None = session.scalar(
+        select(GameState).where(GameState.settings_id == settings_id)
+    )
+    assert state is not None
+    await websocket.accept()
+    try:
+        if state.settings.game_mode == GameMode.SINGLE_PLAYER:
+            await handle_single_player(session, websocket, state, player_nick)
+        else:
+            await handle_multiplayer(session, websocket, state, player_nick)
+    except WebSocketDisconnect:
+        pass

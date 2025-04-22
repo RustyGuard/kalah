@@ -1,43 +1,18 @@
-import pytest
-from fastapi import status
-from fastapi.testclient import TestClient
+from pydantic import PostgresDsn
 
-from main import app
+from src.core.config import settings
 
 
-@pytest.fixture
-def player_client():
-    yield TestClient(app)
+def override_db_name():
+    """Prefix database name with test_"""
+    uri = str(settings.DATABASE_URI)
+    path_start = uri.rfind("/") + 1
+    uri = uri[:path_start] + "test_" + uri[path_start:]
+    settings.DATABASE_URI = PostgresDsn(uri)
 
 
-@pytest.fixture
-def player_token(player_client):
-    response = player_client.post(
-        "/auth",
-        data={
-            "user_name": "Player",
-            "avatar_id": 1,
-        },
-        follow_redirects=False,
-    )
-    assert response.status_code == status.HTTP_303_SEE_OTHER
-    return response.cookies["access_token"]
+override_db_name()
 
-
-@pytest.fixture
-def opponent_client():
-    yield TestClient(app)
-
-
-@pytest.fixture
-def opponent_token(opponent_client):
-    response = opponent_client.post(
-        "/auth",
-        data={
-            "user_name": "Opponent",
-            "avatar_id": 2,
-        },
-        follow_redirects=False,
-    )
-    assert response.status_code == status.HTTP_303_SEE_OTHER
-    return response.cookies["access_token"]
+pytest_plugins = [
+    "tests.fixtures",
+]
