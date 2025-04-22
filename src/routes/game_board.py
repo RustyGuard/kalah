@@ -46,7 +46,7 @@ def game_board_page(
             opponent_player_avatar = request.url_for(
                 "static", path="images/avatars/bot.svg"
             )
-        opponent_player_name = state.settings.lobby.player2_nick
+        opponent_player_name = state.settings.lobby.player2_nick or "Bot"
     else:
         current_player_holes = state.holes_player2
         current_player_key = "holes_player2"
