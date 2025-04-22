@@ -29,10 +29,19 @@ uv run mypy src tests --explicit-package-bases
 
 ### Testing
 
+First you need to setup postgres database
+
+Then create .env file to configure database connection
+
+Then run pytest
 ```commandline
-docker compose up -d
 uv run pytest
-docker compose down
+```
+
+To run inside docker container:
+
+```commandline
+docker compose -f test-compose.yml up --build --exit-code-from run_pytest
 ```
 
 
