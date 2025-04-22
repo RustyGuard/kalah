@@ -1,3 +1,42 @@
 h1 {
     color: red;
+    text-align: center;
+    font-size: 64px;
+}
+
+label, input {
+    display:flex;
+    flex-direction: column;
+}
+.nick {
+    font-size: 24px;
+}
+.menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 24px;
+    height: 80vh;
+    flex: 1 0 100%;
+}
+.big_button {
+    text-align: center;
+    width: 600px;
+    height: 75px;
+    margin: 15px;
+    font-size: 32px;
+}
+.reference{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 10px;
+}
+.developers{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
 }

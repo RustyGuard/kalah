@@ -3,10 +3,12 @@
 {% block title %}Присоединиться к игре{% endblock %}
 
 {% block content %}
-<form method="post">
-    <label for="join_code">Введите код приглашения</label>
-    <input name="join_code" id="join_code">
-    <button type="submit" disabled>Присоединиться</button>
-    <a href="{{url_for('main_page')}}">Вернуться на главную</a>
+<form class="menu" method="post">
+    <div>
+        <label for="join_code">Введите код приглашения</label>
+        <input name="join_code" id="join_code">
+    </div>
+    <button class="big_button" disabled>Присоединиться</button>
+    <a href="{{url_for('main_page')}}"><button class="big_button" type="button">Вернуться на главную</button></a>
 </form>
 {% endblock %}

@@ -3,20 +3,28 @@
 {% block title %}Настройки{% endblock %}
 
 {% block content %}
-<label for="visual_theme">Визуальная тема</label>
-<select name="visual_theme" id="visual_theme">
-    <option>Тема 1</option>
-    <option>Тема 2</option>
-    <option>Тема 3</option>
-</select>
-<label for="background_music">Фоновая музыка</label>
-<select name="background_music" id="background_music">
-    <option>Музыка 1</option>
-    <option>Музыка 2</option>
-    <option>Музыка 3</option>
-</select>
-<label for="volume">Громкость</label>
-<input name="volume" id="volume" type="range" min="0" max="1" step="0.01">
-<a href="{{url_for('main_page')}}">Сохранить и выйти</a>
-<a href="{{url_for('main_page')}}">Отменить</a>
+<div class="menu">
+    <div>
+        <label for="visual_theme">Визуальная тема</label>
+        <select name="visual_theme" id="visual_theme">
+            <option>Тема 1</option>
+            <option>Тема 2</option>
+            <option>Тема 3</option>
+        </select>
+    </div>
+    <div>
+        <label for="background_music">Фоновая музыка</label>
+        <select name="background_music" id="background_music">
+            <option>Музыка 1</option>
+            <option>Музыка 2</option>
+            <option>Музыка 3</option>
+        </select>
+    </div>
+    <div>
+        <label for="volume">Громкость</label>
+        <input name="volume" id="volume" type="range" min="0" max="1" step="0.01">
+    </div>
+    <a href="{{url_for('main_page')}}"><button class="big_button">Сохранить и выйти</button></a>
+    <a href="{{url_for('main_page')}}"><button class="big_button">Отменить</button></a>
+</div>
 {% endblock %}

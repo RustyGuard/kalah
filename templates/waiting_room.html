@@ -3,10 +3,12 @@
 {% block title %}Комната ожидания{% endblock %}
 
 {% block content %}
-<div>Количество лунок на игрока: {{holes_count}}</div>
-<div>Количество камней на лунку: {{stones_count}}</div>
-<div>Код приглашения: {{join_code}}</div>
-<a href="{{url_for('main_page')}}">Вернуться на главную</a>
+<div class="menu">
+    <div>Количество лунок на игрока: {{holes_count}}</div>
+    <div>Количество камней на лунку: {{stones_count}}</div>
+    <div>Код приглашения: {{join_code}}</div>
+    <a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
+</div>
 <script>
     var ws = new WebSocket("ws://localhost:8000/waiting_room/ws");
     ws.onmessage = function(event) {

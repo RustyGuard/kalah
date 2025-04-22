@@ -3,16 +3,18 @@
 {% block title %}Авторизация{% endblock %}
 
 {% block content %}
-<form action="{{url_for('authorize_user')}}" method="post">
-    <label for="user_name">
-        Логин
-    </label>
-    <input id="user_name" name="user_name" value="" required/>
+<form class="menu" action="{{url_for('authorize_user')}}" method="post">
+    <div>
+        <label for="user_name">
+            Логин
+        </label>
+        <input id="user_name" name="user_name" value="" required/>
+    </div>
     <select name="avatar_id" id="avatar_id">
         {% for avatar in avatars %}
         <option value="{{avatar.id}}">Аватар {{avatar.id}}</option>
         {% endfor %}
     </select>
-    <button type="submit">Войти</button>
+    <button class="big_button" type="submit">Войти</button>
 </form>
 {% endblock %}

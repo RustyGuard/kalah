@@ -5,13 +5,15 @@
 {% block content %}
 <div>
     <img src="{{avatar_url}}" width="50"/>
-    <span>{{user_name}}</span>
+    <span class="nick">{{user_name}}</span>
+<a href="{{url_for('exit_user')}}"><button>Выйти</button></a>
 </div>
+<div class="menu">
 <h1>Калах</h1>
-<a href="{{url_for('exit_user')}}">Выйти</a>
-<a href="{{url_for('lobby_settings_page')}}">Создать лобби</a>
-<a href="{{url_for('join_game_page')}}">Присоединиться к лобби</a>
-<a href="{{url_for('settings_page')}}">Настройки</a>
-<a href="{{url_for('help_page')}}">Справка</a>
-<button>О разработчиках</button>
+    <a href="{{url_for('lobby_settings_page')}}"><button class="big_button">Создать лобби</button></a>
+    <a href="{{url_for('join_game_page')}}"><button class="big_button">Присоединиться к лобби</button></a>
+    <a href="{{url_for('settings_page')}}"><button class="big_button">Настройки</button></a>
+</div>
+<a href="{{url_for('help_page')}}" class="reference"><button>Справка</button></a>
+<button class="developers">О разработчиках</button>
 {% endblock %}
