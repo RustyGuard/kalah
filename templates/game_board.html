@@ -55,7 +55,7 @@
 
 <script>
     function connect() {
-        var ws = new WebSocket("ws://localhost:8000/ws/{{settings_id}}/{{current_player_name}}")
+        var ws = new WebSocket("{{url_for('websocket_endpoint', settings_id=settings_id, player_nick=current_player_name)}}")
         const current_player = "{{current_player_name}}"
         ws.onmessage = function(event) {
             console.log(event.data)
