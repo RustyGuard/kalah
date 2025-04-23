@@ -22,7 +22,7 @@ def authorize_page(request: Request) -> Response:
     )
 
 
-AUTH_COOKIE_LIFETIME_SECONDS = 30 * 60
+AUTH_COOKIE_LIFETIME_SECONDS = 30 * 60 * 60
 AUTH_COOKIE_NAME = "access_token"
 
 
