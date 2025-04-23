@@ -4,4 +4,19 @@
 
 {% block content %}
 <h1>Справка</h1>
+<div class="menu">
+    <div style="display:flex;justify-content:space-around;height:60%;">
+        <div style="width:25%;text-align:center;" class="help_box">
+            <button class="middle_button">Кнопка</button>
+            <button class="middle_button">Кнопка</button>
+            <button class="middle_button">Кнопка</button>
+            <button class="middle_button">Кнопка</button>
+            <button class="middle_button">Кнопка</button>
+            <button class="middle_button">Кнопка</button>
+            <button class="middle_button">Кнопка</button>
+        </div>
+        <div style="width:65%;" class="help_box">Text</div>
+    </div>
+<a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
+</div>
 {% endblock %}

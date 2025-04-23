@@ -45,6 +45,10 @@ select, input {
     left: 0;
     margin: 10px;
 }
+.help_box{
+    overflow-y:scroll;
+    background-color:gray;
+}
 .developers{
     position: fixed;
     bottom: 0;
