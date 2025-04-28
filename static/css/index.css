@@ -56,6 +56,10 @@ select, input {
     margin: 10px;
 }
 
+.dev_text {
+    white-space:pre-line;
+}
+
 .avatar_item {
    display: flex;
    align-items: center;
