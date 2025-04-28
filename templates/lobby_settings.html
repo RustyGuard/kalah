@@ -48,5 +48,26 @@
 <a href="{{url_for('help_page')}}" class="reference">
     <button class="middle_button">Справка</button>
 </a>
-<button class="developers middle_button">О разработчиках</button>
+<button class="developers middle_button" onclick="window.devDialog.showModal()">О разработчиках</button>
+<dialog id="devDialog" style="text-align: center;">
+    <div class="dev_text">
+        Самарский университет,
+        Факультет информатики и кибернетики
+    </div>
+    <div class="dev_text">
+        Курсовой проект по дисциплине "Программная инженерия"
+        по теме "Калах"
+    </div>
+    <div class="dev_text">
+        Разработчики (обучающеся группы 6301-020302D):
+        А.А. Головин
+        А.Ю. Черепанов
+        Р.А. Александров
+    </div>
+    <form method="dialog">
+      <button class="middle_button">
+        Закрыть
+      </button>
+    </form>
+</dialog>
 {% endblock %}
