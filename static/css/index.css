@@ -47,7 +47,10 @@ select, input {
 }
 .help_box{
     overflow-y:scroll;
-    background-color:gray;
+    background-color:lightgray;
+}
+.help_chapter {
+    display: none;
 }
 .developers{
     position: fixed;

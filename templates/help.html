@@ -7,16 +7,73 @@
 <div class="menu">
     <div style="display:flex;justify-content:space-around;height:60%;">
         <div style="width:25%;text-align:center;" class="help_box">
-            <button class="medium_button">Кнопка</button>
-            <button class="medium_button">Кнопка</button>
-            <button class="medium_button">Кнопка</button>
-            <button class="medium_button">Кнопка</button>
-            <button class="medium_button">Кнопка</button>
-            <button class="medium_button">Кнопка</button>
-            <button class="medium_button">Кнопка</button>
+            <button class="medium_button help_button" id="help_button_rules" onclick="helpButtonPressed('rules')">
+                Правила игры
+            </button>
+            <button class="medium_button help_button" id="help_button_create_lobby" onclick="helpButtonPressed('create_lobby')">
+                Создание лобби
+            </button>
+            <button class="medium_button help_button" id="help_button_join_lobby" onclick="helpButtonPressed('join_lobby')">
+                Присоединение к лобби
+            </button>
         </div>
-        <div style="width:65%;" class="help_box">Text</div>
+        <div style="width:65%;" class="help_box">
+            <div class="help_chapter" style="display:block;">
+                Нажмите на кнопку слева для просмотрая разделов справки.
+            </div>
+            <div class="help_chapter" id="help_chapter_rules">
+                <div>
+                В калах играет два человека.
+                Комплект для игры калах представляет собой несколько лунок выстроенных в два ряда,
+                и две большие лунки по сторонам, которые и называются "калах".
+                Исходная позиция: в каждой из лунок, кроме калахов, лежит равное число камней.
+                Двое игроков сидят друг напротив друга.
+                Ход заключается в том, что один из играющих берет все шарики из любой лунки в своем ряду
+                и распределяет их по одному в каждую из следующих лунок и свой калах, пропуская калах соперника.
+                </div>
+                <div>
+                    [Картинку сюда]
+                </div>
+                <div>
+                    Если последний камень попал в калах, то игрок ходит снова.
+                </div>
+                <div>
+                    Если последний камень попал в пустую лунку принадлежащую ему
+                    и противоположная лунка соперника не пуста, то этот камень
+                    и все камни из противоположной лунки соперника игрок переносит себе в калах.
+                </div>
+                <div>
+                    Когда у одного из игроков все лунки пусты (ему нечем ходить),
+                    то его соперник переносит все оставшиеся у него в лунках камни в свой калах.
+                    Выигрывает тот у кого в калахе будет больше камней. В случае равенства количества камней - ничья.
+                </div>
+            </div>
+            <div class="help_chapter" id="help_chapter_create_lobby">
+                Здесь должно быть описание того, как создать лобби.
+            </div>
+            <div class="help_chapter" id="help_chapter_join_lobby">
+                Здесь должно быть описание того, как присоединиться к лобби.
+            </div>
+        </div>
     </div>
 <a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
 </div>
+{% endblock %}
+
+{% block head %}
+<script>
+    function helpButtonPressed(id) {
+        var buttons = document.getElementsByClassName("help_button");
+        for(var i = 0; i < buttons.length; i++){
+            buttons[i].disabled=false;
+        }
+        var b = document.getElementById("help_button_" + id).disabled=true;
+
+        var chapters = document.getElementsByClassName("help_chapter");
+        for(var i = 0; i < chapters.length; i++){
+            chapters[i].style.display="none";
+        }
+        document.getElementById("help_chapter_" + id).style.display="block";
+    }
+</script>
 {% endblock %}
