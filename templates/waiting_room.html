@@ -10,7 +10,7 @@
     <a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
 </div>
 <script>
-    var ws = new WebSocket("ws://localhost:8000/waiting_room/{{settings_id}}/ws");
+    var ws = new WebSocket("{{url_for('websocket_waiting_room', settings_id=settings_id)}}");
     ws.onmessage = function(event) {
         window.location.replace("/game_board/{{settings_id}}")
     }

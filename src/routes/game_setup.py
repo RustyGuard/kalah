@@ -109,7 +109,7 @@ def waiting_room_page(
 
 
 @game_setup_router.websocket("/waiting_room/{settings_id}/ws")
-async def websocket_endpoint(
+async def websocket_waiting_room(
     session: Annotated[Session, Depends(get_session)],
     websocket: WebSocket,
     settings_id: int,
