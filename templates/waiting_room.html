@@ -6,7 +6,12 @@
 <div class="menu">
     <div>Количество лунок на игрока: {{holes_count}}</div>
     <div>Количество камней на лунку: {{stones_count}}</div>
-    <div>Код приглашения: {{join_code}}</div>
+    <div>
+        Код приглашения: {{join_code}}
+        <button id="copy">
+            <img src="{{url_for('static', path='images/copy.svg')}}" width="25"/>
+        </button>
+    </div>
     <a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
 </div>
 <script>
@@ -14,5 +19,9 @@
     ws.onmessage = function(event) {
         window.location.replace("/game_board/{{settings_id}}")
     }
+    copy.onclick = function() {
+        navigator.clipboard.writeText("{{join_code}}");
+    }
+
 </script>
 {% endblock %}
