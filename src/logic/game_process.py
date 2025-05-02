@@ -4,7 +4,7 @@ import random
 
 def make_a_turn(
     current_player_holes: list[int], opponent_holes: list[int], selected_cell_index: int
-) -> None:
+) -> bool:
     stones_to_distribute = current_player_holes[selected_cell_index]
     sides = [current_player_holes, opponent_holes]
     current_player_holes[selected_cell_index] = 0
@@ -26,11 +26,16 @@ def make_a_turn(
         and sides[1 - current_side_index][-(current_cell_index + 2)] > 0
     ):
         sides[current_side_index][-1] += sides[current_side_index][current_cell_index]
-        sides[1 - current_side_index][-1] += sides[1 - current_side_index][
+        sides[current_side_index][-1] += sides[1 - current_side_index][
             -(current_cell_index + 2)
         ]
         sides[current_side_index][current_cell_index] = 0
         sides[1 - current_side_index][-(current_cell_index + 2)] = 0
+
+    if current_cell_index == len(sides[current_side_index]) - 1:
+        return True
+
+    return False
 
 
 def get_best_turn(ai_holes: list[int], opponent_holes: list[int]) -> int | None:

@@ -92,20 +92,20 @@ async def handle_single_player(
     while not is_game_over(state.holes_player1, state.holes_player2):
         if state.current_player == state.settings.lobby.player1_nick:
             data = await websocket.receive_json()
-            make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
+            bonus_turn = make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
             flag_modified(state, "holes_player1")
             flag_modified(state, "holes_player2")
-            if can_turn_be_made(state.holes_player2):
+            if can_turn_be_made(state.holes_player2) and not bonus_turn:
                 state.current_player = None
         else:
             await asyncio.sleep(1.0)
             ai_turn = get_best_turn(state.holes_player2, state.holes_player1)
             print(ai_turn)
             assert ai_turn is not None
-            make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
+            bonus_turn = make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
             flag_modified(state, "holes_player1")
             flag_modified(state, "holes_player2")
-            if can_turn_be_made(state.holes_player1):
+            if can_turn_be_made(state.holes_player1) and not bonus_turn:
                 state.current_player = player_nick
         session.commit()
         await websocket.send_json(
@@ -137,12 +137,12 @@ async def handle_multiplayer(
         data = await websocket.receive_json()
         session.refresh(state)
         if state.settings.lobby.player1_nick == player_nick:
-            make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
-            if can_turn_be_made(state.holes_player2):
+            bonus_turn = make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
+            if can_turn_be_made(state.holes_player2) and not bonus_turn:
                 state.current_player = state.settings.lobby.player2_nick
         else:
-            make_a_turn(state.holes_player2, state.holes_player1, int(data["hole"]))
-            if can_turn_be_made(state.holes_player1):
+            bonus_turn = make_a_turn(state.holes_player2, state.holes_player1, int(data["hole"]))
+            if can_turn_be_made(state.holes_player1) and not bonus_turn:
                 state.current_player = state.settings.lobby.player1_nick
         print(
             f"{state.current_player=} {state.settings.lobby.player1_nick=} {state.settings.lobby.player2_nick=}"
