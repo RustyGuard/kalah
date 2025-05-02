@@ -34,11 +34,17 @@ def join_game(
     join_code: Annotated[str, Form()],
     player=Depends(auth_required),
 ):
-    settings = join_player(
-        session,
-        join_code,
-        player["user_name"],
-    )
+    try:
+        settings = join_player(
+            session,
+            join_code,
+            player["user_name"],
+        )
+    except Exception as ex:
+        print(ex)
+        return RedirectResponse(
+            "/join_game?error", status_code=status.HTTP_303_SEE_OTHER
+        )
     return RedirectResponse(
         f"/game_board/{settings.id}", status_code=status.HTTP_303_SEE_OTHER
     )

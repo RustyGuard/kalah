@@ -8,6 +8,9 @@
         <label for="join_code">Введите код приглашения</label>
         <input name="join_code" id="join_code">
     </div>
+    {% if request.query_params.get("error") != None %}
+        <h3 style="color: red;">Неправильный код приглашения</h3>
+    {% endif %}
     <button class="big_button">Присоединиться</button>
     <a href="{{url_for('main_page')}}"><button class="big_button" type="button">Вернуться на главную</button></a>
 </form>
