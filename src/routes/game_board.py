@@ -92,7 +92,9 @@ async def handle_single_player(
     while not is_game_over(state.holes_player1, state.holes_player2):
         if state.current_player == state.settings.lobby.player1_nick:
             data = await websocket.receive_json()
-            bonus_turn = make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
+            bonus_turn = make_a_turn(
+                state.holes_player1, state.holes_player2, int(data["hole"])
+            )
             flag_modified(state, "holes_player1")
             flag_modified(state, "holes_player2")
             if can_turn_be_made(state.holes_player2) and not bonus_turn:
@@ -137,11 +139,15 @@ async def handle_multiplayer(
         data = await websocket.receive_json()
         session.refresh(state)
         if state.settings.lobby.player1_nick == player_nick:
-            bonus_turn = make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
+            bonus_turn = make_a_turn(
+                state.holes_player1, state.holes_player2, int(data["hole"])
+            )
             if can_turn_be_made(state.holes_player2) and not bonus_turn:
                 state.current_player = state.settings.lobby.player2_nick
         else:
-            bonus_turn = make_a_turn(state.holes_player2, state.holes_player1, int(data["hole"]))
+            bonus_turn = make_a_turn(
+                state.holes_player2, state.holes_player1, int(data["hole"])
+            )
             if can_turn_be_made(state.holes_player1) and not bonus_turn:
                 state.current_player = state.settings.lobby.player1_nick
         print(

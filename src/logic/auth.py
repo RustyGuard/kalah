@@ -1,4 +1,5 @@
 import jwt
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from src.models import Player
@@ -11,7 +12,10 @@ def create_player(session: Session, user_name: str, avatar_id: int) -> str:
     user.nickname = user_name
     user.avatar_id = avatar_id
     session.add(user)
-    session.commit()
+    try:
+        session.commit()
+    except IntegrityError:
+        session.rollback()
     return _create_auth_token(user_name, avatar_id)
 
 
