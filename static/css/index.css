@@ -97,3 +97,37 @@ select, input {
 .game_board button.kalah {
     aspect-ratio: 0.5;
 }
+
+.stone_holder {
+    position: relative;
+}
+
+.stone_holder > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.stone_holder > div > div {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: blue;
+}
+
+.stone_holder:hover > div > div {
+    transform: scale(1.1);
+}
+
+::backdrop {
+    background-color: black;
+    opacity: 0.5;
+}

@@ -24,22 +24,42 @@
             <tr>
                 {% for hole in opponent_player_holes | reverse %}
                 <th {% if loop.first %}rowspan="2" {% endif %}>
-                    <button id="player2_hole{{loop.revindex0}}" disabled="disabled" {% if loop.first %}class="kalah" {% endif %}>{{hole}}</button>
+                    <div class="stone_holder">
+                        <button id="player2_hole{{loop.revindex0}}" disabled="disabled" {% if loop.first %}class="kalah"
+                                {% endif %} title="{{hole}}">
+                        </button>
+                        <div>{% for i in range(hole) %}
+                            <div></div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </th>
                 {% endfor %}
                 <th rowspan="2">
-                    <button id="player1_hole{{current_player_holes|length - 1}}" disabled="disabled" class="kalah">
-                        {{current_player_holes[-1]}}
-                    </button>
+                    <div class="stone_holder">
+                        <button id="player1_hole{{current_player_holes|length - 1}}" disabled="disabled" class="kalah"
+                                title="{{current_player_holes[-1]}}">
+                        </button>
+                        <div>{% for i in range(current_player_holes[-1]) %}
+                            <div></div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </th>
             </tr>
             <tr>
                 {% for hole in current_player_holes[:-1] %}
                 <th>
-                    <button id="player1_hole{{loop.index0}}"
-                            {% if current_player_name !=state.current_player or hole == 0 %}
-                            disabled="disabled" {% endif %}>{{hole}}
-                    </button>
+                    <div class="stone_holder">
+                        <button id="player1_hole{{loop.index0}}"
+                                {% if current_player_name !=state.current_player or hole== 0 %}
+                                disabled="disabled" {% endif %} title="{{hole}}">
+                        </button>
+                        <div>{% for i in range(hole) %}
+                            <div></div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </th>
                 {% endfor %}
             </tr>
@@ -50,10 +70,14 @@
             <img src="{{current_player_avatar}}" width="150"/>
         </div>
     </div>
-    <a href="{{url_for('main_page')}}"><button class="big_button" type="button">Вернуться на главную</button></a>
+    <a href="{{url_for('main_page')}}">
+        <button class="big_button" type="button">Вернуться на главную</button>
+    </a>
     <dialog id="gameoverDialog" style="text-align: center;">
-        <p>Здесь должно показывать, кто победил</p>
-        <a href="{{url_for('main_page')}}"><button class="medium_button" type="button">Вернуться на главную</button></a>
+        <p id="gameoverDialogMessage">Здесь должно показывать, кто победил</p>
+        <a href="{{url_for('main_page')}}">
+            <button class="medium_button" type="button">Вернуться на главную</button>
+        </a>
     </dialog>
 </div>
 
@@ -67,16 +91,25 @@
             if (message["type"] == "new_state") {
                 const disabled = message["current_player"] !== current_player
                 {% for hole in current_player_holes  %}
-                player1_hole{{loop.index0}}.innerText = message["{{current_player_key}}"][{{loop.index0}}]
+                player1_hole{{loop.index0}}.title = message["{{current_player_key}}"][{{loop.index0}}]
+                document.getElementById('player1_hole{{loop.index0}}').nextSibling.nextSibling.innerHTML = ""
+                for (let i = 0; i < message["{{current_player_key}}"][{{loop.index0}}]; i++) {
+                    document.getElementById('player1_hole{{loop.index0}}').nextSibling.nextSibling.appendChild(document.createElement("div"))
+                }
                 {% if not loop.last %}
                 player1_hole{{loop.index0}}.disabled = disabled || message["{{current_player_key}}"][{{loop.index0}}] === 0
                 {% endif %}
                 {% endfor %}
                 {% for hole in opponent_player_holes  %}
-                player2_hole{{loop.index0}}.innerText = message["{{opponent_player_key}}"][{{loop.index0}}]
+                player2_hole{{loop.index0}}.title = message["{{opponent_player_key}}"][{{loop.index0}}]
+                document.getElementById('player2_hole{{loop.index0}}').nextSibling.nextSibling.innerHTML = ""
+                for (let i = 0; i < message["{{opponent_player_key}}"][{{loop.index0}}]; i++) {
+                    document.getElementById('player2_hole{{loop.index0}}').nextSibling.nextSibling.appendChild(document.createElement("div"))
+                }
                 {% endfor %}
             } else if (message["type"] == "game_over") {
-                alert("Игра завершена")
+                document.getElementById("gameoverDialog").showModal()
+                document.getElementById("gameoverDialogMessage").innerText = message["message"]
             }
         }
         {% for hole in current_player_holes  %}

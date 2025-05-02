@@ -12,6 +12,7 @@ from src.database import get_session
 from src.logic.game_process import (
     can_turn_be_made,
     get_best_turn,
+    get_game_over_message,
     is_game_over,
     make_a_turn,
 )
@@ -91,23 +92,31 @@ async def handle_single_player(
 ):
     while not is_game_over(state.holes_player1, state.holes_player2):
         if state.current_player == state.settings.lobby.player1_nick:
-            data = await websocket.receive_json()
-            bonus_turn = make_a_turn(
-                state.holes_player1, state.holes_player2, int(data["hole"])
-            )
-            flag_modified(state, "holes_player1")
-            flag_modified(state, "holes_player2")
-            if can_turn_be_made(state.holes_player2) and not bonus_turn:
+            if can_turn_be_made(state.holes_player1):
+                data = await websocket.receive_json()
+                bonus_turn = make_a_turn(
+                    state.holes_player1, state.holes_player2, int(data["hole"])
+                )
+                flag_modified(state, "holes_player1")
+                flag_modified(state, "holes_player2")
+                if not bonus_turn:
+                    state.current_player = None
+            else:
                 state.current_player = None
         else:
-            await asyncio.sleep(1.0)
-            ai_turn = get_best_turn(state.holes_player2, state.holes_player1)
-            print(ai_turn)
-            assert ai_turn is not None
-            bonus_turn = make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
-            flag_modified(state, "holes_player1")
-            flag_modified(state, "holes_player2")
-            if can_turn_be_made(state.holes_player1) and not bonus_turn:
+            if can_turn_be_made(state.holes_player2):
+                await asyncio.sleep(1.0)
+                ai_turn = get_best_turn(state.holes_player2, state.holes_player1)
+                print(ai_turn)
+                assert ai_turn is not None
+                bonus_turn = make_a_turn(
+                    state.holes_player2, state.holes_player1, ai_turn
+                )
+                flag_modified(state, "holes_player1")
+                flag_modified(state, "holes_player2")
+                if not bonus_turn:
+                    state.current_player = player_nick
+            else:
                 state.current_player = player_nick
         session.commit()
         await websocket.send_json(
@@ -121,6 +130,12 @@ async def handle_single_player(
     await websocket.send_json(
         {
             "type": "game_over",
+            "message": get_game_over_message(
+                state.holes_player1,
+                state.holes_player2,
+                state.settings.lobby.player1_nick,
+                "Bot",
+            ),
         }
     )
 
@@ -174,6 +189,12 @@ async def handle_multiplayer(
                     await player_socket.send_json(
                         {
                             "type": "game_over",
+                            "message": get_game_over_message(
+                                state.holes_player1,
+                                state.holes_player2,
+                                state.settings.lobby.player1_nick,
+                                state.settings.lobby.player2_nick,
+                            ),
                         }
                     )
                 except RuntimeError:

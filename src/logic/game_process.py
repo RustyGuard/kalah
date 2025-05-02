@@ -60,3 +60,17 @@ def is_game_over(player1_holes: list[int], player2_holes: list[int]) -> bool:
     if not any(itertools.chain(player1_holes[:-1], player2_holes[:-1])):
         return True
     return False
+
+
+def get_game_over_message(
+    player1_holes: list[int],
+    player2_holes: list[int],
+    player1_nick: str,
+    player2_nick: str,
+) -> str:
+    stones_count = sum(itertools.chain(player1_holes, player2_holes))
+    if player1_holes[-1] > stones_count // 2:
+        return f"Победил {player1_nick}!"
+    if player2_holes[-1] > stones_count // 2:
+        return f"Победил {player2_nick}!"
+    return "Ничья!"
