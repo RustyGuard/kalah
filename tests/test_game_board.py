@@ -43,7 +43,7 @@ def test_first_turn(
             7,
             7,
             7,
-            7,
+            1,
         ],
         "holes_player2": [
             7,
@@ -51,7 +51,7 @@ def test_first_turn(
             6,
             6,
             6,
-            6,
+            0,
         ],
         "type": "new_state",
     }
@@ -65,7 +65,7 @@ def test_first_turn(
             7,
             7,
             7,
-            7,
+            1,
         ],
         "holes_player2": [
             0,
@@ -73,7 +73,7 @@ def test_first_turn(
             7,
             7,
             7,
-            7,
+            1,
         ],
         "type": "new_state",
     }

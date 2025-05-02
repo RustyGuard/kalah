@@ -9,7 +9,12 @@ from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.sql import select
 
 from src.database import get_session
-from src.logic.game_process import can_turn_be_made, get_best_turn, make_a_turn
+from src.logic.game_process import (
+    can_turn_be_made,
+    get_best_turn,
+    is_game_over,
+    make_a_turn,
+)
 from src.models import GameMode, GameState
 from src.routes.auth import auth_required
 from src.templates import templates
@@ -38,6 +43,7 @@ def game_board_page(
         opponent_player_holes = state.holes_player2
         opponent_player_key = "holes_player2"
         if state.settings.lobby.player2_nick is not None:
+            assert state.settings.lobby.player2 is not None
             opponent_player_avatar = request.url_for(
                 "static",
                 path=f"images/avatars/avatar{state.settings.lobby.player2.avatar_id}.svg",
@@ -83,12 +89,24 @@ async def handle_single_player(
     state: GameState,
     player_nick: str,
 ):
-    while True:
-        data = await websocket.receive_json()
-        make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
-        flag_modified(state, "holes_player1")
-        flag_modified(state, "holes_player2")
-        state.current_player = None
+    while not is_game_over(state.holes_player1, state.holes_player2):
+        if state.current_player == state.settings.lobby.player1_nick:
+            data = await websocket.receive_json()
+            make_a_turn(state.holes_player1, state.holes_player2, int(data["hole"]))
+            flag_modified(state, "holes_player1")
+            flag_modified(state, "holes_player2")
+            if can_turn_be_made(state.holes_player2):
+                state.current_player = None
+        else:
+            await asyncio.sleep(1.0)
+            ai_turn = get_best_turn(state.holes_player2, state.holes_player1)
+            print(ai_turn)
+            assert ai_turn is not None
+            make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
+            flag_modified(state, "holes_player1")
+            flag_modified(state, "holes_player2")
+            if can_turn_be_made(state.holes_player1):
+                state.current_player = player_nick
         session.commit()
         await websocket.send_json(
             {
@@ -98,31 +116,11 @@ async def handle_single_player(
                 "current_player": state.current_player,
             }
         )
-        while True:
-            await asyncio.sleep(1.0)
-            ai_turn = get_best_turn(state.holes_player2, state.holes_player1)
-            print(ai_turn)
-            if ai_turn is not None:
-                make_a_turn(state.holes_player2, state.holes_player1, ai_turn)
-                flag_modified(state, "holes_player1")
-                flag_modified(state, "holes_player2")
-            if can_turn_be_made(state.holes_player1):
-                state.current_player = player_nick
-            session.commit()
-            await websocket.send_json(
-                {
-                    "type": "new_state",
-                    "holes_player1": state.holes_player1,
-                    "holes_player2": state.holes_player2,
-                    "current_player": state.current_player,
-                }
-            )
-            if can_turn_be_made(state.holes_player1):
-                break
-            if not can_turn_be_made(state.holes_player1) and not can_turn_be_made(
-                state.holes_player2
-            ):
-                return
+    await websocket.send_json(
+        {
+            "type": "game_over",
+        }
+    )
 
 
 settings_id_to_sockets: defaultdict[int, list[WebSocket]] = defaultdict(list)
@@ -164,6 +162,17 @@ async def handle_multiplayer(
                 )
             except RuntimeError:
                 settings_id_to_sockets[state.settings_id].remove(player_socket)
+        if is_game_over(state.holes_player1, state.holes_player2):
+            for player_socket in settings_id_to_sockets[state.settings_id].copy():
+                try:
+                    await player_socket.send_json(
+                        {
+                            "type": "game_over",
+                        }
+                    )
+                except RuntimeError:
+                    settings_id_to_sockets[state.settings_id].remove(player_socket)
+            break
 
 
 @game_board_router.websocket("/ws/{settings_id}/{player_nick}")

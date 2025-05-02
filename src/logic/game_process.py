@@ -1,3 +1,4 @@
+import itertools
 import random
 
 
@@ -29,3 +30,14 @@ def get_best_turn(ai_holes: list[int], opponent_holes: list[int]) -> int | None:
 
 def can_turn_be_made(current_player_holes: list[int]) -> bool:
     return any(current_player_holes[:-1])
+
+
+def is_game_over(player1_holes: list[int], player2_holes: list[int]) -> bool:
+    stones_count = sum(itertools.chain(player1_holes, player2_holes))
+    if player1_holes[-1] > stones_count // 2:
+        return True
+    if player2_holes[-1] > stones_count // 2:
+        return True
+    if not any(itertools.chain(player1_holes[:-1], player2_holes[:-1])):
+        return True
+    return False

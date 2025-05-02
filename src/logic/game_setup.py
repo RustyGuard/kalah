@@ -10,8 +10,12 @@ from src.models import GameMode, GameSettings, GameState, Lobby
 def create_game_state(settings: GameSettings) -> GameState:
     state = GameState()
     state.settings = settings
-    state.holes_player1 = [settings.stones_per_hole_count] * (settings.holes_count - 1) + [0]
-    state.holes_player2 = [settings.stones_per_hole_count] * (settings.holes_count - 1) + [0]
+    state.holes_player1 = [settings.stones_per_hole_count] * (
+        settings.holes_count - 1
+    ) + [0]
+    state.holes_player2 = [settings.stones_per_hole_count] * (
+        settings.holes_count - 1
+    ) + [0]
     state.current_player = settings.lobby.player1_nick
     return state
 

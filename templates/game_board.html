@@ -75,6 +75,8 @@
                 {% for hole in opponent_player_holes  %}
                 player2_hole{{loop.index0}}.innerText = message["{{opponent_player_key}}"][{{loop.index0}}]
                 {% endfor %}
+            } else if (message["type"] == "game_over") {
+                alert("Игра завершена")
             }
         }
         {% for hole in current_player_holes  %}
