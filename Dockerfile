@@ -1,14 +1,5 @@
 FROM python:3.12.10-bookworm
 
-COPY ./src ./src
-COPY ./migrations ./migrations
-COPY ./static ./static
-COPY ./templates ./templates
-COPY ./tests ./tests
-COPY ./asgi.py ./asgi.py
-COPY ./.python-version ./.python-version
-COPY ./.env ./.env
-
 # The installer requires curl (and certificates) to download the release archive
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
 # Download the latest installer
@@ -20,5 +11,14 @@ ENV PATH="/root/.local/bin/:$PATH"
 COPY ./pyproject.toml ./pyproject.toml
 COPY ./uv.lock ./uv.lock
 RUN uv sync
+
+COPY ./src ./src
+COPY ./migrations ./migrations
+COPY ./static ./static
+COPY ./templates ./templates
+COPY ./tests ./tests
+COPY ./asgi.py ./asgi.py
+COPY ./.python-version ./.python-version
+COPY ./.env ./.env
 
 ENTRYPOINT uv run pytest

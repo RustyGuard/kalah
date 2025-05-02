@@ -18,6 +18,20 @@ def make_a_turn(
         sides[current_side_index][current_cell_index] += 1
         stones_to_distribute -= 1
 
+    # Capture rule
+    if (
+        current_side_index == 0
+        and current_cell_index != len(sides[current_side_index]) - 1
+        and sides[current_side_index][current_cell_index] == 1
+        and sides[1 - current_side_index][-(current_cell_index + 2)] > 0
+    ):
+        sides[current_side_index][-1] += sides[current_side_index][current_cell_index]
+        sides[1 - current_side_index][-1] += sides[1 - current_side_index][
+            -(current_cell_index + 2)
+        ]
+        sides[current_side_index][current_cell_index] = 0
+        sides[1 - current_side_index][-(current_cell_index + 2)] = 0
+
 
 def get_best_turn(ai_holes: list[int], opponent_holes: list[int]) -> int | None:
     try:
