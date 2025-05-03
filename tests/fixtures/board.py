@@ -29,7 +29,7 @@ def initialized_multiplayer_board(
         follow_redirects=False,
     )
     assert response.status_code == status.HTTP_200_OK
-    join_code = re.search("<div>Код приглашения: (.+)</div>", response.text).group(1)  # type: ignore[union-attr]
+    join_code = re.search(r"Код приглашения:\s*(.+?)\s*<button", response.text).group(1)  # type: ignore[union-attr]
     with player_client.websocket_connect("/waiting_room/1/ws") as websocket:
         response = opponent_client.post(
             "/join_game",
