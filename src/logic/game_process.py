@@ -38,7 +38,9 @@ def make_a_turn(
     return False
 
 
-def get_best_turn(depth: int, ai_holes: list[int], opponent_holes: list[int]) -> int | None:
+def get_best_turn(
+    depth: int, ai_holes: list[int], opponent_holes: list[int]
+) -> int | None:
     try:
         return random.choice(
             [(i, hole) for i, hole in enumerate(ai_holes[:-1]) if hole]

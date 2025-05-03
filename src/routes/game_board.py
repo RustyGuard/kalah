@@ -106,7 +106,11 @@ async def handle_single_player(
         else:
             if can_turn_be_made(state.holes_player2):
                 await asyncio.sleep(1.0)
-                ai_turn = get_best_turn(state.settings.difficulty_level, state.holes_player2, state.holes_player1)
+                ai_turn = get_best_turn(
+                    state.settings.difficulty_level,
+                    state.holes_player2,
+                    state.holes_player1,
+                )
                 print(ai_turn)
                 assert ai_turn is not None
                 bonus_turn = make_a_turn(
@@ -193,7 +197,7 @@ async def handle_multiplayer(
                                 state.holes_player1,
                                 state.holes_player2,
                                 state.settings.lobby.player1_nick,
-                                state.settings.lobby.player2_nick,
+                                state.settings.lobby.player2_nick,  # type: ignore[arg-type]
                             ),
                         }
                     )
