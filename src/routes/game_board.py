@@ -11,6 +11,7 @@ from sqlalchemy.sql import select
 from src.database import get_session
 from src.logic.game_process import (
     can_turn_be_made,
+    finish_game,
     get_best_turn,
     get_game_over_message,
     is_game_over,
@@ -131,6 +132,7 @@ async def handle_single_player(
                 "current_player": state.current_player,
             }
         )
+    finish_game(state.holes_player1, state.holes_player2)
     await websocket.send_json(
         {
             "type": "game_over",
@@ -188,6 +190,7 @@ async def handle_multiplayer(
             except RuntimeError:
                 settings_id_to_sockets[state.settings_id].remove(player_socket)
         if is_game_over(state.holes_player1, state.holes_player2):
+            finish_game(state.holes_player1, state.holes_player2)
             for player_socket in settings_id_to_sockets[state.settings_id].copy():
                 try:
                     await player_socket.send_json(
