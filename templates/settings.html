@@ -7,9 +7,10 @@
     <div>
         <label for="visual_theme">Визуальная тема</label>
         <select name="visual_theme" id="visual_theme">
-            <option>Тема 1</option>
-            <option>Тема 2</option>
-            <option>Тема 3</option>
+            <option id="day_theme">Дневная</option>
+            <option id="night_theme">Ночная</option>
+            <option id="twilight_theme">Сумеречная</option>
+            <option id="forest_theme">Лесная</option>
         </select>
     </div>
     <div>
@@ -24,7 +25,29 @@
         <label for="volume">Громкость</label>
         <input name="volume" id="volume" type="range" min="0" max="1" step="0.01">
     </div>
-    <a href="{{url_for('main_page')}}"><button class="big_button">Сохранить и выйти</button></a>
+    <button class="big_button" onclick="saveSettings()">Сохранить и выйти</button>
     <a href="{{url_for('main_page')}}"><button class="big_button">Отменить</button></a>
 </div>
+{% endblock %}
+
+{% block head %}
+<script>
+    function loadSettings() {
+        var visualThemeSelect = document.getElementById("visual_theme");
+        var visualThemeOptions = visualThemeSelect.options;
+        visualThemeOptions.forEach((visual_theme) => {
+        if (visual_theme.id == localStorage.getItem("visual_theme")) {
+            visual_theme.selected = "selected";
+        }
+    });
+    }
+
+    function saveSettings() {
+        var visualThemeSelect = document.getElementById("visual_theme");
+        localStorage.setItem("visual_theme", visualThemeSelect.selectedOptions[0].id);
+        window.location.href = "{{url_for('main_page')}}";
+    }
+
+    document.onload = loadSettings();
+</script>
 {% endblock %}
