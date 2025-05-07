@@ -62,7 +62,7 @@ def is_game_over(player1_holes: list[int], player2_holes: list[int]) -> bool:
     # Проверяем, пусты ли все лунки игрока (кроме калаха)
     if all(count == 0 for count in player1_holes[:-1]):
         return True
-        # Проверяем, пусты ли все лунки противника (кроме калаха)
+    # Проверяем, пусты ли все лунки противника (кроме калаха)
     if all(count == 0 for count in player2_holes[:-1]):
         return True
     return False

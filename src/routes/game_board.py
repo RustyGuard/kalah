@@ -135,6 +135,14 @@ async def handle_single_player(
     finish_game(state.holes_player1, state.holes_player2)
     await websocket.send_json(
         {
+            "type": "new_state",
+            "holes_player1": state.holes_player1,
+            "holes_player2": state.holes_player2,
+            "current_player": state.current_player,
+        }
+    )
+    await websocket.send_json(
+        {
             "type": "game_over",
             "message": get_game_over_message(
                 state.holes_player1,
@@ -193,6 +201,14 @@ async def handle_multiplayer(
             finish_game(state.holes_player1, state.holes_player2)
             for player_socket in settings_id_to_sockets[state.settings_id].copy():
                 try:
+                    await player_socket.send_json(
+                        {
+                            "type": "new_state",
+                            "holes_player1": state.holes_player1,
+                            "holes_player2": state.holes_player2,
+                            "current_player": state.current_player,
+                        }
+                    )
                     await player_socket.send_json(
                         {
                             "type": "game_over",
