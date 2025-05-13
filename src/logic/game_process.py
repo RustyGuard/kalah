@@ -62,7 +62,7 @@ def is_game_over(player1_holes: list[int], player2_holes: list[int]) -> bool:
     # Проверяем, пусты ли все лунки игрока (кроме калаха)
     if all(count == 0 for count in player1_holes[:-1]):
         return True
-        # Проверяем, пусты ли все лунки противника (кроме калаха)
+    # Проверяем, пусты ли все лунки противника (кроме калаха)
     if all(count == 0 for count in player2_holes[:-1]):
         return True
     return False
@@ -91,12 +91,12 @@ def get_game_over_message(
     player1_nick: str,
     player2_nick: str,
 ) -> str:
-    stones_count = sum(itertools.chain(player1_holes, player2_holes))
-    if player1_holes[-1] > stones_count // 2:
+    if player1_holes[-1] > player2_holes[-1]:
         return f"Победил {player1_nick}!"
-    if player2_holes[-1] > stones_count // 2:
+    elif player2_holes[-1] > player1_holes[-1]:
         return f"Победил {player2_nick}!"
-    return "Ничья!"
+    else:
+        return "Ничья!"
 
 
 class KalahAI:
