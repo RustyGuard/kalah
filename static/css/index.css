@@ -6,6 +6,7 @@
     --box-bg: lightgray;
     --text-color: hsl(0 0% 0%);
     --button-text-color: hsl(0 0% 0%);
+    --bg-image: url("../images/bg-images/bg-image-day.png");
 }
 
 .night_theme {
@@ -16,6 +17,7 @@
     --box-bg: hsl(250 20% 16%);
     --text-color: hsl(50 16% 80%);
     --button-text-color: hsl(50 16% 80%);
+    --bg-image: url("../images/bg-images/bg-image-night.png");
 }
 
 .twilight_theme {
@@ -26,6 +28,7 @@
     --box-bg: hsl(300 35% 65%);
     --text-color: hsl(300 45% 78%);
     --button-text-color: hsl(250 32% 20%);
+    --bg-image: url("../images/bg-images/bg-image-twilight.png");
 }
 
 
@@ -37,27 +40,33 @@
     --box-bg: hsl(28 35% 12%);
     --text-color: hsl(12 85% 10%);
     --button-text-color: hsl(39 52% 73%);
+    --bg-image: url("../images/bg-images/bg-image-forest.png");
 }
-
 h1 {
     text-align: center;
-    color: var(--text-color);
+    font-family: 'Brush Script MT', cursive;
+    -webkit-text-stroke: 3px var(--button-bg);
+    color: var(--button-text-color);
     font-size: 64px;
 }
 body{
+    background-image: var(--bg-image);
+    background-position: center;
     background-color: var(--body-bg);
+    min-height: 100%;
+    background-size: 100%;
 }
 a {
     color: var(--text-color);
 }
 label, input {
-    color: var(--text-color);
+    color: var(--button-text-color);
     display:flex;
     flex-direction: column;
 }
 select, input {
-    background-color: var(--box-bg);
-    color: var(--button-text-color);
+    background-color: var(--body-bg);
+    color: var(--text-color);
     width:650px;
     height: 40px;
     font-size: 24px;
@@ -68,8 +77,8 @@ dialog {
     border-color: var(--text-color);
 }
 .nick {
-    color: var(--text-color);
-    font-size: 24px;
+    color: var(--button-text-color);
+    font-size: 48px;
 }
 .menu {
     display: flex;
@@ -89,6 +98,7 @@ dialog {
     height: 75px;
     margin: 15px;
     font-size: 32px;
+    border-radius: 12px;
 }
 .medium_button {
     text-align: center;
@@ -98,6 +108,13 @@ dialog {
     height: 50px;
     margin: 10px;
     font-size: 24px;
+    border-radius: 12px;
+}
+.box {
+    background-color: var(--box-bg);
+    padding: 5px;
+    border-color: var(--button-bg);
+    border-radius: 5px;
 }
 .reference{
     position: fixed;

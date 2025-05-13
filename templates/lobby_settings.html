@@ -4,14 +4,14 @@
 
 {% block content %}
 <form class="menu" method="post">
-    <div>
+    <div class="box">
         <label for="game_mode">Режим игры</label>
         <select id="game_mode" name="game_mode">
             <option value="single_player">Однопользовательский</option>
             <option value="multiplayer">Многопользовательский</option>
         </select>
     </div>
-    <div>
+    <div class="box">
         <label for="holes_count">Число лунок</label>
         <select id="holes_count" name="holes_count">
             <option value="6">6</option>
@@ -21,7 +21,7 @@
             <option value="10">10</option>
         </select>
     </div>
-    <div>
+    <div class="box">
         <label for="stones_count">Число камней</label>
         <select id="stones_count" name="stones_count">
             <option value="1">1</option>
@@ -32,7 +32,7 @@
             <option value="6">6</option>
         </select>
     </div>
-    <div>
+    <div class="box">
         <label for="difficulty_level">Уровень сложности</label>
         <select id="difficulty_level" name="difficulty_level">
             <option value="3">Лёгкий</option>

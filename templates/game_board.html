@@ -13,7 +13,7 @@
         flex-direction: column;
         align-items: center;
     ">
-        <div style="align-self: start" class="avatar_item">
+        <div style="align-self: start" class="avatar_item box">
             <img src="{{opponent_player_avatar}}" width="150"/>
             <span>{{opponent_player_name}}</span>
         </div>
@@ -63,7 +63,7 @@
             </tr>
         </table>
 
-        <div style="align-self: end" class="avatar_item">
+        <div style="align-self: end" class="avatar_item box">
             <span>{{current_player_name}}</span>
             <img src="{{current_player_avatar}}" width="150"/>
         </div>
@@ -71,7 +71,7 @@
     <a href="{{url_for('main_page')}}">
         <button class="big_button" type="button">Вернуться на главную</button>
     </a>
-    <dialog id="gameoverDialog" style="text-align: center;">
+    <dialog class="dev_text" id="gameoverDialog" style="text-align: center;">
         <p id="gameoverDialogMessage">Здесь должно показывать, кто победил</p>
         <a href="{{url_for('main_page')}}">
             <button class="medium_button" type="button">Вернуться на главную</button>
