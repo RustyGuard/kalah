@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
     <link href="{{ url_for('static', path='css/index.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
     <script>
         function setTheme() {
             document.documentElement.className = localStorage.getItem("visual_theme");
@@ -11,7 +12,6 @@
 
         document.onload = setTheme();
     </script>
-    {% block head %}{% endblock %}
 </head>
 <body>
 {% block content %}{% endblock %}

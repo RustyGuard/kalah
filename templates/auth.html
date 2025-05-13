@@ -18,3 +18,15 @@
     <button class="big_button" type="submit">Войти</button>
 </form>
 {% endblock %}
+
+{% block head %}
+<script>
+    function loadSettings() {
+        if (!localStorage.getItem("visual_theme")) {
+            localStorage.setItem("visual_theme", "day_theme");
+        }
+    };
+
+    document.onload = loadSettings();
+</script>
+{% endblock %}
