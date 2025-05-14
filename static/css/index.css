@@ -156,7 +156,7 @@ dialog {
 
 .avatar_item span {
     font-size: 50px;
-    color: var(--text-color);
+    color: var(--button-text-color);
 }
 
 .game_board button {
