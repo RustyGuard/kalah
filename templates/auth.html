@@ -10,11 +10,16 @@
         </label>
         <input id="user_name" name="user_name" value="" required/>
     </div>
-    <select name="avatar_id" id="avatar_id">
-        {% for avatar in avatars %}
-        <option value="{{avatar.id}}">Аватар {{avatar.id}}</option>
-        {% endfor %}
-    </select>
+    <div class="box">
+        <select name="avatar_id" id="avatar_id" hidden>
+            {% for avatar in avatars %}
+            <option value="{{avatar.id}}">Аватар {{avatar.id}}</option>
+            {% endfor %}
+        </select>
+        <button type="button" onclick="avatarLeft()"><</button>
+        <img id="avatar_image" src="../static/images/avatars/avatar0.svg" width="150"/>
+        <button type="button" onclick="avatarRight()">></button>
+    </div>
     <button class="big_button" type="submit">Войти</button>
 </form>
 {% endblock %}
@@ -27,6 +32,34 @@
         }
     };
 
+    function avatarLeft() {
+        var avatar_select = document.getElementById("avatar_id");
+        var avatar_image = document.getElementById("avatar_image");
+        var avatar_id = avatar_select.value;
+        if (avatar_id <= 0) {
+            avatar_id = 9;
+        }
+        else {
+            avatar_id -= 1;
+        }
+        avatar_select.value = avatar_id;
+        avatar_image.src = "../static/images/avatars/avatar" + avatar_id + ".svg";
+    }
+
+
+    function avatarRight() {
+        var avatar_select = document.getElementById("avatar_id");
+        var avatar_image = document.getElementById("avatar_image");
+        var avatar_id = avatar_select.value;
+        if (avatar_id >= 9) {
+            avatar_id = 0;
+        }
+        else {
+            avatar_id = parseInt(avatar_id) + 1;
+        }
+        avatar_select.value = avatar_id;
+        avatar_image.src = "../static/images/avatars/avatar" + avatar_id + ".svg";
+    }
     document.onload = loadSettings();
 </script>
 {% endblock %}
