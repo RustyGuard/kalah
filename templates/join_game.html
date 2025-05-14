@@ -6,7 +6,7 @@
 <form class="menu" method="post">
     <div>
         <label for="join_code">Введите код приглашения</label>
-        <input name="join_code" id="join_code">
+        <input name="join_code" id="join_code" required>
     </div>
     {% if request.query_params.get("error") != None %}
         <h3 style="color: red;">Неправильный код приглашения</h3>
