@@ -6,7 +6,7 @@
 <div class="menu">
     <div class="box">
         <label for="visual_theme">Визуальная тема</label>
-        <select name="visual_theme" id="visual_theme">
+        <select name="visual_theme" id="visual_theme" onchange="changeTheme()">
             <option value="day_theme">Дневная</option>
             <option value="night_theme">Ночная</option>
             <option value="twilight_theme">Сумеречная</option>
@@ -85,6 +85,11 @@
         const volumeInput = document.getElementById("volume");
         const audio = document.getElementById("background_audio");
         audio.volume = volumeInput.value;
+    }
+
+    function changeTheme() {
+        const visualThemeSelect = document.getElementById("visual_theme");
+        document.documentElement.className = visualThemeSelect.value;
     }
 
     function saveSettings() {
