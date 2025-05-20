@@ -12,7 +12,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
     ">
+        <div id="your_turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}hidden{% else %}visible{% endif %}; font-size: 50px; padding: 10px 15px; background-color: rgb(255 255 255 / 50%); position: absolute; left: 0; bottom: 0;">Ваш ход</div>
+        <div id="opponent_turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}visible{% else %}hidden{% endif %}; font-size: 50px; padding: 10px 15px; background-color: rgb(255 255 255 / 50%); position: absolute; right: 0; top: 0;">Ход соперника</div>
         <div style="align-self: start" class="avatar_item box">
             <img src="{{opponent_player_avatar}}" width="150"/>
             <span>{{opponent_player_name}}</span>
@@ -113,6 +116,14 @@
             const message = JSON.parse(event.data)
             if (message["type"] == "new_state") {
                 const disabled = message["current_player"] !== current_player
+                if (disabled) {
+                    document.getElementById("your_turn").style.visibility = "hidden"
+                    document.getElementById("opponent_turn").style.visibility = "visible"
+                }
+                else {
+                    document.getElementById("your_turn").style.visibility = "visible"
+                    document.getElementById("opponent_turn").style.visibility = "hidden"
+                }
                 {% for hole in current_player_holes  %}
                 player1_hole{{loop.index0}}.title = message["{{current_player_key}}"][{{loop.index0}}]
                 document.getElementById('player1_hole{{loop.index0}}').nextSibling.nextSibling.innerHTML = ""

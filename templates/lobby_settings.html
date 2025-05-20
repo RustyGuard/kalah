@@ -6,7 +6,16 @@
 <form class="menu" method="post">
     <div class="box">
         <label for="game_mode">Режим игры</label>
-        <select id="game_mode" name="game_mode">
+        <select id="game_mode" name="game_mode" onchange='
+        if (document.getElementById("game_mode").value == "multiplayer") {
+            document.getElementById("difficulty_box").style.visibility = "hidden";
+            document.getElementById("difficulty_box").style.pointerEvents = "hidden";
+        }
+        else {
+            document.getElementById("difficulty_box").style.visibility = "visible";
+            document.getElementById("difficulty_box").style.pointerEvents = "auto";
+        }
+        '>
             <option value="single_player">Однопользовательский</option>
             <option value="multiplayer">Многопользовательский</option>
         </select>
@@ -32,7 +41,7 @@
             <option value="6">6</option>
         </select>
     </div>
-    <div class="box">
+    <div class="box" id="difficulty_box">
         <label for="difficulty_level">Уровень сложности</label>
         <select id="difficulty_level" name="difficulty_level">
             <option value="3">Лёгкий</option>
