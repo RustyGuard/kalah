@@ -8,13 +8,16 @@ from src.models import GameMode, GameSettings, GameState, Lobby
 
 
 def create_game_state(settings: GameSettings) -> GameState:
+    """
+    Создание объекта состояния игры на основании настроек игры
+    """
     state = GameState()
     state.settings = settings
     state.holes_player1 = [settings.stones_per_hole_count] * (
-        settings.holes_count - 1
+        settings.holes_count
     ) + [0]
     state.holes_player2 = [settings.stones_per_hole_count] * (
-        settings.holes_count - 1
+        settings.holes_count
     ) + [0]
     state.current_player = settings.lobby.player1_nick
     return state
@@ -27,6 +30,7 @@ def create_single_player_game(
     stones_per_hole_count: int,
     difficulty_level: int,
 ) -> GameSettings:
+    """ Создание одиночной игры. Создаются объекты: настройки, лобби, состояние игры """
     settings = GameSettings()
     settings.holes_count = holes_count
     settings.stones_per_hole_count = stones_per_hole_count
@@ -50,6 +54,7 @@ def create_multiplayer_game(
     holes_count: int,
     stones_per_hole_count: int,
 ) -> GameSettings:
+    """ Создание многопользовательской игры игры. Создаются объекты: настройки, лобби, состояние игры """
     settings = GameSettings()
     settings.holes_count = holes_count
     settings.stones_per_hole_count = stones_per_hole_count
@@ -70,6 +75,7 @@ def join_player(
     join_code: str,
     opponent_nick: str,
 ) -> GameSettings:
+    """ Присоединение игрока к лобби. При подключении деактивируется код приглашения """
     lobby: Lobby | None = session.scalar(
         select(Lobby).where(Lobby.join_code == UUID(join_code))
     )

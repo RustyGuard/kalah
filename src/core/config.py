@@ -50,6 +50,9 @@ class Settings(BaseSettings):
         )
 
     AUTH_SECRET_KEY: str = "adasdlkasdaksd"
+    AVATARS_COUNT: int = 10
+    AUTH_COOKIE_LIFETIME_SECONDS: int = 30 * 60 * 60
+    AUTH_COOKIE_NAME: str = "access_token"
 
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")
 

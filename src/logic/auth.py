@@ -9,10 +9,16 @@ from src.models import Player
 
 
 def _gen_unique_user_name(user_name: str) -> str:
+    """
+    Вспомогательная функция, предназначенная для возможности использования одного ника разными людьми
+    """
     return f"{user_name}@{random.randint(1, 9999):04d}"
 
 
 def create_player(session: Session, user_name: str, avatar_id: int) -> str:
+    """
+    Создает пользователя в бд и возвращает его jwt токен
+    """
     user_name = _gen_unique_user_name(user_name)
     user = Player()
     user.nickname = user_name
@@ -22,6 +28,7 @@ def create_player(session: Session, user_name: str, avatar_id: int) -> str:
         session.commit()
     except IntegrityError:
         session.rollback()
+        raise
     return _create_auth_token(user_name, avatar_id)
 
 

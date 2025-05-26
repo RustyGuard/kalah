@@ -65,7 +65,7 @@ def lobby_settings(
     game_mode: Annotated[str, Form()],
     holes_count: Annotated[str, Form()],
     stones_count: Annotated[str, Form()],
-    difficulty_level: Annotated[str, Form()],  # todo
+    difficulty_level: Annotated[str, Form()],
     player=Depends(auth_required),
 ):
     if game_mode == "single_player":

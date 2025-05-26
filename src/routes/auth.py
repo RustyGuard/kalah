@@ -4,11 +4,10 @@ from fastapi import APIRouter, Depends, Form, Request, Response, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
+from src.core.config import settings
 from src.database import get_session
 from src.logic.auth import create_player, decode_access_token
 from src.templates import templates
-
-AVATARS_COUNT = 10
 
 auth_router = APIRouter()
 
@@ -18,12 +17,8 @@ def authorize_page(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="auth.html",
-        context={"avatars": [{"id": i} for i in range(AVATARS_COUNT)]},
+        context={"avatars": [{"id": i} for i in range(settings.AVATARS_COUNT)]},
     )
-
-
-AUTH_COOKIE_LIFETIME_SECONDS = 30 * 60 * 60
-AUTH_COOKIE_NAME = "access_token"
 
 
 class AuthError(Exception):
@@ -31,7 +26,7 @@ class AuthError(Exception):
 
 
 def auth_required(request: Request):
-    access_token = request.cookies.get(AUTH_COOKIE_NAME)
+    access_token = request.cookies.get(settings.AUTH_COOKIE_NAME)
     if access_token is None:
         raise AuthError
     payload = decode_access_token(access_token)
@@ -47,9 +42,9 @@ def authorize_user(
     response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
     auth_token = create_player(session, user_name, avatar_id)
     response.set_cookie(
-        AUTH_COOKIE_NAME,
+        settings.AUTH_COOKIE_NAME,
         value=auth_token,
-        expires=AUTH_COOKIE_LIFETIME_SECONDS,
+        expires=settings.AUTH_COOKIE_LIFETIME_SECONDS,
         httponly=True,
         samesite="strict",
     )
@@ -60,7 +55,7 @@ def authorize_user(
 def exit_user() -> Response:
     response = RedirectResponse("/auth")
     response.delete_cookie(
-        AUTH_COOKIE_NAME,
+        settings.AUTH_COOKIE_NAME,
         httponly=True,
         samesite="strict",
     )
