@@ -49,6 +49,8 @@ class Settings(BaseSettings):
             path=info.data.get("POSTGRES_DB"),
         )
 
+    AUTH_SECRET_KEY: str = "adasdlkasdaksd"
+
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env")
 
 
