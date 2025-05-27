@@ -123,9 +123,17 @@ dialog {
     margin: 10px;
 }
 .help_box{
-    overflow-y:scroll;
-    background-color: var(--box-bg);
-    color: var(--button-text-color);
+    padding: 0;
+    background-color: var(--body-bg);
+    color: var(--text-color);
+}
+.help_button {
+    position:sticky;
+    bottom: 30px;
+    right: 20px;
+}
+.help_chapter {
+    padding: 10px
 }
 .developers{
     position: fixed;
