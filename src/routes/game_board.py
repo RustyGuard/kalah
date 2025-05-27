@@ -91,8 +91,8 @@ async def handle_single_player(
     state: GameState,
     player_nick: str,
 ):
-    while not is_game_over(state.holes_player1, state.holes_player2):
-        if state.current_player == state.settings.lobby.player1_nick:
+    while not is_game_over(state.holes_player1, state.holes_player2):  # событийный цикл
+        if state.current_player == state.settings.lobby.player1_nick:  # обработка хода игрока
             if can_turn_be_made(state.holes_player1):
                 data = await websocket.receive_json()
                 bonus_turn = make_a_turn(
@@ -104,15 +104,14 @@ async def handle_single_player(
                     state.current_player = None
             else:
                 state.current_player = None
-        else:
+        else:  # обработка хода бота
             if can_turn_be_made(state.holes_player2):
-                await asyncio.sleep(1.0)
+                await asyncio.sleep(1.0)  # ожидание, чтобы не пугать пользователя мгновенным ходом ии
                 ai_turn = get_best_turn(
                     state.settings.difficulty_level,
                     state.holes_player2,
                     state.holes_player1,
                 )
-                print(ai_turn)
                 assert ai_turn is not None
                 bonus_turn = make_a_turn(
                     state.holes_player2, state.holes_player1, ai_turn
@@ -124,7 +123,7 @@ async def handle_single_player(
             else:
                 state.current_player = player_nick
         session.commit()
-        await websocket.send_json(
+        await websocket.send_json(  # обновляем состояние поля игрока
             {
                 "type": "new_state",
                 "holes_player1": state.holes_player1,
@@ -132,6 +131,8 @@ async def handle_single_player(
                 "current_player": state.current_player,
             }
         )
+
+    # завершаем игру и отображаем это на поле
     finish_game(state.holes_player1, state.holes_player2)
     await websocket.send_json(
         {
@@ -141,7 +142,7 @@ async def handle_single_player(
             "current_player": state.current_player,
         }
     )
-    await websocket.send_json(
+    await websocket.send_json(  # отправляем событие с результатами игры
         {
             "type": "game_over",
             "message": get_game_over_message(
@@ -164,9 +165,11 @@ async def handle_multiplayer(
     player_nick: str,
 ):
     settings_id_to_sockets[state.settings_id].append(websocket)
-    while True:
+    while True:  # событийный цикл
         data = await websocket.receive_json()
         session.refresh(state)
+
+        # совершаем ход и по необходимости меняем активного игрока
         if state.settings.lobby.player1_nick == player_nick:
             bonus_turn = make_a_turn(
                 state.holes_player1, state.holes_player2, int(data["hole"])
@@ -182,9 +185,13 @@ async def handle_multiplayer(
         print(
             f"{state.current_player=} {state.settings.lobby.player1_nick=} {state.settings.lobby.player2_nick=}"
         )
+
+        # сигнализируем о необходимости обновить значения в бд
         flag_modified(state, "holes_player1")
         flag_modified(state, "holes_player2")
         session.commit()
+
+        # отсылаем всем подключенным к игре актуальное состояние поля
         for player_socket in settings_id_to_sockets[state.settings_id].copy():
             try:
                 await player_socket.send_json(
@@ -197,6 +204,8 @@ async def handle_multiplayer(
                 )
             except RuntimeError:
                 settings_id_to_sockets[state.settings_id].remove(player_socket)
+
+        # если игра завершена - определяем победителя и сообщаем всем подключенным к игре его ник
         if is_game_over(state.holes_player1, state.holes_player2):
             finish_game(state.holes_player1, state.holes_player2)
             for player_socket in settings_id_to_sockets[state.settings_id].copy():

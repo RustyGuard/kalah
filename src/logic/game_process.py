@@ -4,6 +4,10 @@ import itertools
 def make_a_turn(
     current_player_holes: list[int], opponent_holes: list[int], selected_cell_index: int
 ) -> bool:
+    """
+    Совершаем ход и возвращаем, остается ли ход у игрока
+    """
+
     stones_to_distribute = current_player_holes[selected_cell_index]
     sides = [current_player_holes, opponent_holes]
     current_player_holes[selected_cell_index] = 0
@@ -15,7 +19,7 @@ def make_a_turn(
             current_cell_index = 0
             current_side_index = 1 - current_side_index
 
-        # Skip opponent's kalah
+        # Пропускаем калах оппонента
         if (
             current_side_index == 1
             and current_cell_index == len(sides[current_side_index]) - 1
@@ -26,7 +30,7 @@ def make_a_turn(
         sides[current_side_index][current_cell_index] += 1
         stones_to_distribute -= 1
 
-    # Capture rule
+    # Правило захвата
     if (
         current_side_index == 0
         and current_cell_index != len(sides[current_side_index]) - 1
@@ -70,8 +74,7 @@ def is_game_over(player1_holes: list[int], player2_holes: list[int]) -> bool:
 
 def finish_game(player1_holes: list[int], player2_holes: list[int]):
     """
-    Завершает игру, перемещая все оставшиеся камни в калахи
-    соответствующих игроков.
+    Завершает игру, перемещая все оставшиеся камни в калахи соответствующих игроков.
     """
 
     # Собираем камни игрока ИИ
@@ -176,13 +179,13 @@ class KalahAI:
         Возвращает (оценка, лучший_ход). Если глубина = 0 или игра закончена, возвращает (оценка, None).
         """
         if depth == 0 or is_game_over(ai_holes, opponent_holes):
-            # Если игра закончилась, завершаем ее перед оценкой
-            if is_game_over(ai_holes, opponent_holes):
-                final_ai, final_opponent = self.simulate_finish_game(
-                    ai_holes, opponent_holes
-                )
-                return self.evaluate_board(final_ai, final_opponent), None
             return self.evaluate_board(ai_holes, opponent_holes), None
+
+        if is_game_over(ai_holes, opponent_holes):
+            final_ai, final_opponent = self.simulate_finish_game(
+                ai_holes, opponent_holes
+            )
+            return self.evaluate_board(final_ai, final_opponent), None
 
         if is_ai_turn:
             # Максимизирующий игрок (ИИ)

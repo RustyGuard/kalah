@@ -2,21 +2,17 @@
 
 {% block title %}Игровое поле{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="/static/css/game_board.css">
+{% endblock %}
+
 {% block content %}
-<div style="
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-">
-    <div style="
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-    ">
-        <div id="your_turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}hidden{% else %}visible{% endif %}; font-size: 50px; padding: 10px 15px; background-color: rgb(255 255 255 / 50%); position: absolute; left: 0; bottom: 0;">Ваш ход</div>
-        <div id="opponent_turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}visible{% else %}hidden{% endif %}; font-size: 50px; padding: 10px 15px; background-color: rgb(255 255 255 / 50%); position: absolute; right: 0; top: 0;">Ход соперника</div>
-        <div style="align-self: start" class="avatar_item box">
+<div class="game-container">
+    <button id="muteButton" class="mute-button" title="Выключить звук">🔊</button>
+    <div class="board-container">
+        <div id="your_turn" class="turn-indicator your-turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}hidden{% else %}visible{% endif %};">Ваш ход</div>
+        <div id="opponent_turn" class="turn-indicator opponent-turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}visible{% else %}hidden{% endif %};">Ход соперника</div>
+        <div class="avatar_item box opponent">
             <img src="{{opponent_player_avatar}}" width="150"/>
             <span>{{opponent_player_name}}</span>
         </div>
@@ -66,7 +62,7 @@
             </tr>
         </table>
 
-        <div style="align-self: end" class="avatar_item box">
+        <div class="avatar_item box current-player">
             <span>{{current_player_name}}</span>
             <img src="{{current_player_avatar}}" width="150"/>
         </div>
@@ -95,9 +91,24 @@
         const audio = document.getElementById("background_audio");
         const savedMusic = localStorage.getItem("background_music");
         const savedVolume = localStorage.getItem("volume");
+        const muteButton = document.getElementById("muteButton");
 
         // Set volume (default to 0.5 if not set)
         audio.volume = savedVolume !== null ? savedVolume : 0.5;
+        audio.muted = localStorage.getItem("muted") === "true";
+        updateMuteButton(audio.muted);
+
+        // Toggle mute state on button click
+        muteButton.addEventListener("click", () => {
+            audio.muted = !audio.muted;
+            localStorage.setItem("muted", audio.muted);
+            updateMuteButton(audio.muted);
+        });
+
+        function updateMuteButton(isMuted) {
+            muteButton.textContent = isMuted ? "🔇" : "🔊";
+            muteButton.title = isMuted ? "Включить звук" : "Выключить звук";
+        }
 
         // Set and play music if selected
         if (savedMusic && musicFiles[savedMusic]) {
@@ -162,6 +173,5 @@
         };
     }
     connect()
-
 </script>
 {% endblock %}

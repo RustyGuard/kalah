@@ -213,3 +213,59 @@ dialog {
     background-color: black;
     opacity: 0.5;
 }
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.turn-indicator {
+    font-size: 50px;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+}
+
+.your-turn {
+    left: 0;
+    bottom: 0;
+}
+
+.opponent-turn {
+    right: 0;
+    top: 0;
+}
+
+.avatar_item.box.opponent {
+    align-self: start;
+}
+
+.avatar_item.box.current-player {
+    align-self: end;
+}
+
+.mute-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mute-button:hover {
+    background-color: #e0e0e0;
+}
