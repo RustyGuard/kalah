@@ -127,9 +127,6 @@ dialog {
     background-color: var(--box-bg);
     color: var(--button-text-color);
 }
-.help_chapter {
-    display: none;
-}
 .developers{
     position: fixed;
     bottom: 0;

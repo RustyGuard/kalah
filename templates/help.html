@@ -3,28 +3,39 @@
 {% block title %}Справка{% endblock %}
 
 {% block content %}
-<h1>Справка</h1>
-<div class="menu">
-    <div style="display:flex;justify-content:space-around;height:60%;">
-        <div style="width:25%;text-align:center;" class="help_box">
-            <button class="medium_button help_button" id="help_button_game_history" onclick="helpButtonPressed('game_history')">
+<div class="menu" style="height:100vh;">
+    <div style="display:flex;justify-content:space-around;height:100%;">
+        <div style="width:25%;">
+            <div style="text-align:center;" class="help_box">
+                <a href="#help_chapter_game_history">
+            <button class="medium_button help_button" id="help_button_game_history" >
                 История игры
             </button>
-            <button class="medium_button help_button" id="help_button_rules" onclick="helpButtonPressed('rules')">
+                </a>
+                <a href="#help_chapter_rules">
+            <button class="medium_button help_button" id="help_button_rules">
                 Правила игры
             </button>
-            <button class="medium_button help_button" id="help_button_create_lobby" onclick="helpButtonPressed('create_lobby')">
+                </a>
+                <a href="#help_chapter_create_lobby">
+            <button class="medium_button help_button" id="help_button_create_lobby">
                 Создание лобби
             </button>
-            <button class="medium_button help_button" id="help_button_join_lobby" onclick="helpButtonPressed('join_lobby')">
+                </a>
+                <a href="#help_chapter_join_lobby">
+            <button class="medium_button help_button" id="help_button_join_lobby">
                 Присоединение к лобби
             </button>
-        </div>
-        <div style="width:65%;" class="help_box">
-            <div class="help_chapter" style="display:block;">
-                Нажмите на кнопку слева для просмотрая разделов справки.
+                </a>
             </div>
-            <div class="help_chapter" id="help_chapter_game_history">
+            <div style="text-align:center;">
+            <a href="{{url_for('main_page')}}"><button class="medium_button help_button">Вернуться на главную</button></a>
+            </div>
+        </div>
+        <div style="width:70%;" class="help_box">
+            <h1>Справка</h1>
+            <h2 id="help_chapter_game_history">История игры</h2>
+            <div class="help_chapter" >
                 <div>
                     Прототипом игры калах является более древняя игра манкала,
                     происходящая из северной Африки,
@@ -49,7 +60,8 @@
                     располагающейся по адресу 27 Maple Avenue, округ Норфолк, штат Массачусетс.
                 </div>
             </div>
-            <div class="help_chapter" id="help_chapter_rules">
+            <h2 id="help_chapter_rules">Правила игры</h2>
+            <div class="help_chapter">
                 <div>
                 В калах играет два человека.
                 Комплект для игры калах представляет собой несколько лунок выстроенных в два ряда,
@@ -81,7 +93,8 @@
                     Выигрывает тот у кого в калахе будет больше камней. В случае равенства количества камней - ничья.
                 </div>
             </div>
-            <div class="help_chapter" id="help_chapter_create_lobby">
+            <h2 id="help_chapter_create_lobby">Создание лобби</h2>
+            <div class="help_chapter" >
                 <div>
                     Для начала процесса создания лобби, необходимо нажать соответствующую кнопку в главном меню,
                     после чего откроется страница создания лобби.
@@ -127,7 +140,8 @@
                     <img src="../static/images/help/lobby_wait.png" width="500">
                 </div>
             </div>
-            <div class="help_chapter" id="help_chapter_join_lobby">
+            <h2 id="help_chapter_join_lobby">Присоединение к лобби</h2>
+            <div class="help_chapter">
                 <div>
                     Для начала процесса присоединения к лобби, необходимо нажать соответствующую кнопку в главном меню,
                     после чего откроется страница приоединения к лобби.
@@ -148,24 +162,5 @@
             </div>
         </div>
     </div>
-<a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
 </div>
-{% endblock %}
-
-{% block head %}
-<script>
-    function helpButtonPressed(id) {
-        var buttons = document.getElementsByClassName("help_button");
-        for(var i = 0; i < buttons.length; i++){
-            buttons[i].disabled=false;
-        }
-        var b = document.getElementById("help_button_" + id).disabled=true;
-
-        var chapters = document.getElementsByClassName("help_chapter");
-        for(var i = 0; i < chapters.length; i++){
-            chapters[i].style.display="none";
-        }
-        document.getElementById("help_chapter_" + id).style.display="block";
-    }
-</script>
 {% endblock %}
