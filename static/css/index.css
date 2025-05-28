@@ -129,6 +129,7 @@ dialog {
 }
 .help_button {
     position:sticky;
+    float: right;
     bottom: 30px;
     right: 20px;
 }
