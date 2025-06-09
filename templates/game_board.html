@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Игровое поле{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/game_board.css">
+{% endblock %}
+
+{% block content %}
+<div class="game-container">
+    <button id="muteButton" class="mute-button" title="Выключить звук">🔊</button>
+    <div class="board-container">
+        <div id="your_turn" class="turn-indicator your-turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}hidden{% else %}visible{% endif %};">Ваш ход</div>
+        <div id="opponent_turn" class="turn-indicator opponent-turn" style="visibility: {% if current_player_name != state.current_player or hole == 0 %}visible{% else %}hidden{% endif %};">Ход соперника</div>
+        <div class="avatar_item box opponent">
+            <img src="{{opponent_player_avatar}}" width="150"/>
+            <span>{{opponent_player_name}}</span>
+        </div>
+
+        <table class="game_board">
+            <tr>
+                {% for hole in opponent_player_holes | reverse %}
+                <th {% if loop.first %}rowspan="2" {% endif %}>
+                    <div class="stone_holder">
+                        <button id="player2_hole{{loop.revindex0}}" disabled="disabled" {% if loop.first %}class="kalah"
+                                {% endif %} title="{{hole}}">
+                        </button>
+                        <div>{% for i in range(hole) %}
+                            <div></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+                {% endfor %}
+                <th rowspan="2">
+                    <div class="stone_holder">
+                        <button id="player1_hole{{current_player_holes|length - 1}}" disabled="disabled" class="kalah"
+                                title="{{current_player_holes[-1]}}">
+                        </button>
+                        <div>{% for i in range(current_player_holes[-1]) %}
+                            <div></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                {% for hole in current_player_holes[:-1] %}
+                <th>
+                    <div class="stone_holder">
+                        <button id="player1_hole{{loop.index0}}"
+                                {% if current_player_name != state.current_player or hole == 0 %}
+                                disabled="disabled" {% endif %} title="{{hole}}">
+                        </button>
+                        <div>{% for i in range(hole) %}
+                            <div></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+                {% endfor %}
+            </tr>
+        </table>
+
+        <div class="avatar_item box current-player">
+            <span>{{current_player_name}}</span>
+            <img src="{{current_player_avatar}}" width="150"/>
+        </div>
+    </div>
+    <audio id="background_audio" loop></audio>
+    <a href="{{url_for('main_page')}}">
+        <button class="big_button" type="button">Вернуться на главную</button>
+    </a>
+    <dialog class="dev_text" id="gameoverDialog" style="text-align: center;">
+        <p id="gameoverDialogMessage">Здесь должно показывать, кто победил</p>
+        <a href="{{url_for('main_page')}}">
+            <button class="medium_button" type="button">Вернуться на главную</button>
+        </a>
+    </dialog>
+</div>
+
+<script>
+    // Map music options to audio file paths
+    const musicFiles = {
+        'moon_hydrogen': '/static/music/moon_hydrogen.mp3',
+        'without_reality': '/static/music/without_reality.mp3',
+        'heaven_central': '/static/music/heaven_central.mp3'
+    };
+
+    function loadMusic() {
+        const audio = document.getElementById("background_audio");
+        const savedMusic = localStorage.getItem("background_music");
+        const savedVolume = localStorage.getItem("volume");
+        const muteButton = document.getElementById("muteButton");
+
+        // Set volume (default to 0.5 if not set)
+        audio.volume = savedVolume !== null ? savedVolume : 0.5;
+        audio.muted = localStorage.getItem("muted") === "true";
+        updateMuteButton(audio.muted);
+
+        // Toggle mute state on button click
+        muteButton.addEventListener("click", () => {
+            audio.muted = !audio.muted;
+            localStorage.setItem("muted", audio.muted);
+            updateMuteButton(audio.muted);
+        });
+
+        function updateMuteButton(isMuted) {
+            muteButton.textContent = isMuted ? "🔇" : "🔊";
+            muteButton.title = isMuted ? "Включить звук" : "Выключить звук";
+        }
+
+        // Set and play music if selected
+        if (savedMusic && musicFiles[savedMusic]) {
+            audio.src = musicFiles[savedMusic];
+            audio.play().catch(error => console.error("Error playing audio:", error));
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadMusic);
+
+    function connect() {
+        var ws = new WebSocket("{{url_for('websocket_endpoint', settings_id=settings_id, player_nick=current_player_name)}}")
+        const current_player = "{{current_player_name}}"
+        ws.onmessage = function(event) {
+            console.log(event.data)
+            const message = JSON.parse(event.data)
+            if (message["type"] == "new_state") {
+                const disabled = message["current_player"] !== current_player
+                if (disabled) {
+                    document.getElementById("your_turn").style.visibility = "hidden"
+                    document.getElementById("opponent_turn").style.visibility = "visible"
+                }
+                else {
+                    document.getElementById("your_turn").style.visibility = "visible"
+                    document.getElementById("opponent_turn").style.visibility = "hidden"
+                }
+                {% for hole in current_player_holes  %}
+                player1_hole{{loop.index0}}.title = message["{{current_player_key}}"][{{loop.index0}}]
+                document.getElementById('player1_hole{{loop.index0}}').nextSibling.nextSibling.innerHTML = ""
+                for (let i = 0; i < message["{{current_player_key}}"][{{loop.index0}}]; i++) {
+                    document.getElementById('player1_hole{{loop.index0}}').nextSibling.nextSibling.appendChild(document.createElement("div"))
+                }
+                {% if not loop.last %}
+                player1_hole{{loop.index0}}.disabled = disabled || message["{{current_player_key}}"][{{loop.index0}}] === 0
+                {% endif %}
+                {% endfor %}
+                {% for hole in opponent_player_holes  %}
+                player2_hole{{loop.index0}}.title = message["{{opponent_player_key}}"][{{loop.index0}}]
+                document.getElementById('player2_hole{{loop.index0}}').nextSibling.nextSibling.innerHTML = ""
+                for (let i = 0; i < message["{{opponent_player_key}}"][{{loop.index0}}]; i++) {
+                    document.getElementById('player2_hole{{loop.index0}}').nextSibling.nextSibling.appendChild(document.createElement("div"))
+                }
+                {% endfor %}
+            } else if (message["type"] == "game_over") {
+                document.getElementById("gameoverDialog").showModal()
+                document.getElementById("gameoverDialogMessage").innerText = message["message"]
+            }
+        }
+        {% for hole in current_player_holes  %}
+        player1_hole{{loop.index0}}.onclick = function() {
+            ws.send(JSON.stringify({
+                "hole": {{loop.index0}}
+            }))
+        }
+        {% endfor %}
+
+        ws.onclose = function(e) {
+            console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+            setTimeout(function() {
+                connect();
+            }, 1000);
+        };
+    }
+    connect()
+</script>
+{% endblock %}

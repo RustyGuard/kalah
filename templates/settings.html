@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block content %}
+<div class="menu">
+    <div class="box">
+        <label for="visual_theme">Визуальная тема</label>
+        <select name="visual_theme" id="visual_theme" onchange="changeTheme()">
+            <option value="day_theme">Дневная</option>
+            <option value="night_theme">Ночная</option>
+            <option value="twilight_theme">Сумеречная</option>
+            <option value="forest_theme">Лесная</option>
+        </select>
+    </div>
+    <div class="box">
+        <label for="background_music">Фоновая музыка</label>
+        <select name="background_music" id="background_music" onchange="changeMusic()">
+            <option value="moon_hydrogen">M.O.O.N. - Hydrogen</option>
+            <option value="without_reality">Without reality - plenka</option>
+            <option value="heaven_central">Heaven Central Authority - Machine Girl</option>
+        </select>
+    </div>
+    <div class="box">
+        <label for="volume">Громкость</label>
+        <input name="volume" id="volume" type="range" min="0" max="1" step="0.01" oninput="changeVolume()">
+    </div>
+    <audio id="background_audio" loop></audio>
+    <button class="big_button" onclick="saveSettings()">Сохранить и выйти</button>
+    <a href="{{url_for('main_page')}}"><button class="big_button">Отменить</button></a>
+</div>
+{% endblock %}
+
+{% block head %}
+<script>
+    // Map music options to audio file paths
+    const musicFiles = {
+        'moon_hydrogen': '/static/music/moon_hydrogen.mp3',
+        'without_reality': '/static/music/without_reality.mp3',
+        'heaven_central': '/static/music/heaven_central.mp3'
+    };
+
+    function loadSettings() {
+        // Load visual theme
+        const visualThemeSelect = document.getElementById("visual_theme");
+        const savedTheme = localStorage.getItem("visual_theme");
+        if (savedTheme) {
+            visualThemeSelect.value = savedTheme;
+        }
+
+        // Load background music
+        const backgroundMusicSelect = document.getElementById("background_music");
+        const savedMusic = localStorage.getItem("background_music");
+        if (savedMusic) {
+            backgroundMusicSelect.value = savedMusic;
+        }
+
+        // Load volume
+        const volumeInput = document.getElementById("volume");
+        const savedVolume = localStorage.getItem("volume");
+        if (savedVolume !== null) {
+            volumeInput.value = savedVolume;
+        }
+
+        // Set up audio
+        const audio = document.getElementById("background_audio");
+        audio.volume = savedVolume !== null ? savedVolume : 0.5; // Default volume if not set
+        if (savedMusic && musicFiles[savedMusic]) {
+            audio.src = musicFiles[savedMusic];
+            audio.play().catch(error => console.error("Error playing audio:", error));
+        }
+    }
+
+    function changeMusic() {
+        const backgroundMusicSelect = document.getElementById("background_music");
+        const selectedMusic = backgroundMusicSelect.value;
+        const audio = document.getElementById("background_audio");
+        if (musicFiles[selectedMusic]) {
+            audio.src = musicFiles[selectedMusic];
+            audio.play().catch(error => console.error("Error playing audio:", error));
+        }
+    }
+
+    function changeVolume() {
+        const volumeInput = document.getElementById("volume");
+        const audio = document.getElementById("background_audio");
+        audio.volume = volumeInput.value;
+    }
+
+    function changeTheme() {
+        const visualThemeSelect = document.getElementById("visual_theme");
+        document.documentElement.className = visualThemeSelect.value;
+    }
+
+    function saveSettings() {
+        // Save visual theme
+        const visualThemeSelect = document.getElementById("visual_theme");
+        localStorage.setItem("visual_theme", visualThemeSelect.value);
+
+        // Save background music
+        const backgroundMusicSelect = document.getElementById("background_music");
+        localStorage.setItem("background_music", backgroundMusicSelect.value);
+
+        // Save volume
+        const volumeInput = document.getElementById("volume");
+        localStorage.setItem("volume", volumeInput.value);
+
+        window.location.href = "{{url_for('main_page')}}";
+    }
+
+    // Load settings when the page loads
+    document.addEventListener('DOMContentLoaded', loadSettings);
+</script>
+{% endblock %}

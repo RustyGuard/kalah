@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Настройка лобби{% endblock %}
+
+{% block content %}
+<form class="menu" method="post">
+    <div class="box">
+        <label for="game_mode">Режим игры</label>
+        <select id="game_mode" name="game_mode" onchange='
+        if (document.getElementById("game_mode").value == "multiplayer") {
+            document.getElementById("difficulty_box").style.visibility = "hidden";
+            document.getElementById("difficulty_box").style.pointerEvents = "hidden";
+        }
+        else {
+            document.getElementById("difficulty_box").style.visibility = "visible";
+            document.getElementById("difficulty_box").style.pointerEvents = "auto";
+        }
+        '>
+            <option value="single_player">Однопользовательский</option>
+            <option value="multiplayer">Многопользовательский</option>
+        </select>
+    </div>
+    <div class="box">
+        <label for="holes_count">Число лунок</label>
+        <select id="holes_count" name="holes_count">
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+    <div class="box">
+        <label for="stones_count">Число камней</label>
+        <select id="stones_count" name="stones_count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+    </div>
+    <div class="box" id="difficulty_box">
+        <label for="difficulty_level">Уровень сложности</label>
+        <select id="difficulty_level" name="difficulty_level">
+            <option value="3">Лёгкий</option>
+            <option value="4">Средний</option>
+            <option value="5">Сложный</option>
+        </select>
+    </div>
+    <button class="big_button" type="submit">Создать лобби</button>
+    <a href="{{url_for('main_page')}}">
+        <button class="big_button" type="button">Вернуться на главную</button>
+    </a>
+</form>
+<a href="{{url_for('help_page')}}" class="reference">
+    <button class="medium_button">Справка</button>
+</a>
+<button class="developers medium_button" onclick="window.devDialog.showModal()">О разработчиках</button>
+{% include "dev_modal.html" %}
+{% endblock %}

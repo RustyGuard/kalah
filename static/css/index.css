@@ -1,0 +1,280 @@
+.day_theme {
+    --body-bg: hsl(0 0% 95%);
+    --button-bg: hsl(0 0% 85%);
+    --highlight-bg: hsl(0 0% 100%);
+    --disabled-bg: hsl(0 0% 65%);
+    --box-bg: lightgray;
+    --text-color: hsl(0 0% 0%);
+    --button-text-color: hsl(0 0% 0%);
+    --bg-image: url("../images/bg-images/bg-image-day.png");
+}
+
+.night_theme {
+    --body-bg: hsl(250 25% 12%);
+    --button-bg: hsl(250 20% 20%);
+    --highlight-bg: hsl(250 20% 25%);
+    --disabled-bg: hsl(250 10% 8%);
+    --box-bg: hsl(250 20% 16%);
+    --text-color: hsl(50 16% 80%);
+    --button-text-color: hsl(50 16% 80%);
+    --bg-image: url("../images/bg-images/bg-image-night.png");
+}
+
+.twilight_theme {
+    --body-bg: hsl(250 32% 50%);
+    --button-bg: hsl(300 45% 75%);
+    --highlight-bg: hsl(300 45% 85%);
+    --disabled-bg: hsl(300 40% 65%);
+    --box-bg: hsl(300 35% 65%);
+    --text-color: hsl(300 45% 78%);
+    --button-text-color: hsl(250 32% 20%);
+    --bg-image: url("../images/bg-images/bg-image-twilight.png");
+}
+
+
+.forest_theme {
+    --body-bg: hsl(120 40% 25%);
+    --button-bg: hsl(28 35% 18%);
+    --highlight-bg: hsl(28 45% 25%);
+    --disabled-bg: hsl(28 25% 15%);
+    --box-bg: hsl(28 35% 12%);
+    --text-color: hsl(12 85% 10%);
+    --button-text-color: hsl(39 52% 73%);
+    --bg-image: url("../images/bg-images/bg-image-forest.png");
+}
+h1 {
+    text-align: center;
+    font-family: 'Brush Script MT', cursive;
+    -webkit-text-stroke: 3px var(--button-bg);
+    color: var(--button-text-color);
+    font-size: 64px;
+}
+body{
+    background-image: var(--bg-image);
+    background-position: center;
+    background-color: var(--body-bg);
+    min-height: 100%;
+    background-size: 100%;
+}
+a {
+    color: var(--text-color);
+}
+label, input {
+    color: var(--button-text-color);
+    display:flex;
+    flex-direction: column;
+}
+select, input {
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    width:650px;
+    height: 40px;
+    font-size: 24px;
+}
+dialog {
+    text-align: center;
+    background-color: var(--body-bg);
+    border-color: var(--text-color);
+}
+.nick {
+    color: var(--button-text-color);
+    font-size: 48px;
+}
+.menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 24px;
+    height: 80vh;
+    flex: 1 0 100%;
+}
+.big_button {
+    text-align: center;
+    color: var(--button-text-color);
+    background-color: var(--button-bg);
+    width: 500px;
+    height: 75px;
+    margin: 15px;
+    font-size: 32px;
+    border-radius: 12px;
+}
+.medium_button {
+    text-align: center;
+    color: var(--button-text-color);
+    background-color: var(--button-bg);
+    width: 300px;
+    height: 50px;
+    margin: 10px;
+    font-size: 24px;
+    border-radius: 12px;
+}
+.box {
+    background-color: var(--box-bg);
+    padding: 5px;
+    border-color: var(--button-bg);
+    border-radius: 5px;
+}
+.reference{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 10px;
+}
+.help_box{
+    padding: 0;
+    background-color: var(--body-bg);
+    color: var(--text-color);
+}
+.help_button {
+    position:sticky;
+    float: right;
+    bottom: 30px;
+    right: 20px;
+}
+.help_chapter {
+    padding: 10px
+}
+.developers{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    color: var(--button-text-color);
+}
+
+.dev_text {
+    color: var(--button-text-color);
+    white-space:pre-line;
+}
+
+.avatar_item {
+   display: flex;
+   align-items: center;
+   gap: 5px;
+}
+
+.avatar_item img {
+    width: 150px;
+}
+
+
+.avatar_item span {
+    font-size: 50px;
+    color: var(--button-text-color);
+}
+
+.game_board button {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    min-width: 55px;
+    width: 8vw;
+    aspect-ratio: 1;
+    font-size: 50px;
+    border-radius: 25%;
+    box-shadow: 5px 5px 6px 7px rgba(34, 60, 80, 0.2) inset;
+}
+
+.game_board button:hover {
+    background-color: var(--highlight-bg);
+}
+
+.game_board button:disabled {
+    background-color: var(--disabled-bg);
+}
+
+.game_board button.kalah {
+    aspect-ratio: 0.5;
+}
+
+.stone_holder {
+    position: relative;
+}
+
+.stone_holder > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    position: absolute;
+    left: 5px;
+    top: 0;
+    right: 5px;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.stone_holder > div > div {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #65cdff;
+    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.52);
+}
+
+.stone_holder:hover > div > div {
+    transform: scale(1.1);
+}
+
+::backdrop {
+    background-color: black;
+    opacity: 0.5;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.turn-indicator {
+    font-size: 50px;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+}
+
+.your-turn {
+    left: 0;
+    bottom: 0;
+}
+
+.opponent-turn {
+    right: 0;
+    top: 0;
+}
+
+.avatar_item.box.opponent {
+    align-self: start;
+}
+
+.avatar_item.box.current-player {
+    align-self: end;
+}
+
+.mute-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mute-button:hover {
+    background-color: #e0e0e0;
+}

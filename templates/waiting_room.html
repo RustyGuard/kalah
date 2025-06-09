@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Комната ожидания{% endblock %}
+
+{% block content %}
+<div class="menu">
+    <div style="padding: 10px 15px; background-color: rgb(255 255 255 / 50%);">Количество лунок на игрока: {{holes_count}}</div>
+    <div style="padding: 10px 15px; background-color: rgb(255 255 255 / 50%);">Количество камней на лунку: {{stones_count}}</div>
+    <div style="padding: 10px 15px; background-color: rgb(255 255 255 / 50%);">
+        Код приглашения: {{join_code}}
+        <button id="copy">
+            <img src="{{url_for('static', path='images/copy.svg')}}" width="25"/>
+        </button>
+    </div>
+    <a href="{{url_for('main_page')}}"><button class="big_button">Вернуться на главную</button></a>
+</div>
+<script>
+    var ws = new WebSocket("{{url_for('websocket_waiting_room', settings_id=settings_id)}}");
+    ws.onmessage = function(event) {
+        window.location.replace("/game_board/{{settings_id}}")
+    }
+    copy.onclick = function() {
+        navigator.clipboard.writeText("{{join_code}}");
+    }
+
+</script>
+{% endblock %}
